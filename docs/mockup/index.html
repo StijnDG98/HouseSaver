@@ -1,0 +1,564 @@
+<title>HouseSaver</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --surface-2:#e9efec; --ink:#17211e; --ink-2:#5d6a66; --ink-3:#8b9793;
+  --line:#d9e1dd; --accent:#1e6b57; --accent-soft:#dcefe7; --accent-ink:#ffffff;
+  --good:#1a7f2e; --warn:#b85c00; --bad:#c8322f; --bad-soft:#fbe6e4;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --grey:#b8c2be; --band:rgba(42,120,214,.16);
+  --radius:12px; --nav-h:64px;
+  --display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111716; --surface:#1a2220; --surface-2:#222c29; --ink:#eef2f0; --ink-2:#a8b4b0; --ink-3:#7c8884;
+    --line:#2b3633; --accent:#5cbd9a; --accent-soft:#1f3a32; --accent-ink:#0d1a15;
+    --good:#4fc26a; --warn:#e6913b; --bad:#ef6f6c; --bad-soft:#3a201f;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --grey:#4b5652; --band:rgba(57,135,229,.22);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111716; --surface:#1a2220; --surface-2:#222c29; --ink:#eef2f0; --ink-2:#a8b4b0; --ink-3:#7c8884;
+  --line:#2b3633; --accent:#5cbd9a; --accent-soft:#1f3a32; --accent-ink:#0d1a15;
+  --good:#4fc26a; --warn:#e6913b; --bad:#ef6f6c; --bad-soft:#3a201f;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --grey:#4b5652; --band:rgba(57,135,229,.22);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+html,body{height:100%}
+.app{display:flex;min-height:100%}
+.nav{position:fixed;left:0;right:0;bottom:0;height:var(--nav-h);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface);border-top:1px solid var(--line);display:flex;z-index:20}
+.nav .brand{display:none}
+.nav button{flex:1;background:none;border:0;color:var(--ink-3);font:inherit;font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:0}
+.nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{color:var(--accent)}
+.nav button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:8px}
+main{flex:1;padding-block:16px calc(var(--nav-h) + 24px);padding-inline:16px;max-width:1120px;margin:0 auto;width:100%}
+@media (min-width:900px){
+  .nav{position:sticky;top:0;bottom:auto;height:100vh;width:220px;flex-direction:column;border-top:0;border-right:1px solid var(--line);padding:20px 12px;gap:4px;align-self:flex-start}
+  .nav .brand{display:block;font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink);padding:6px 12px 18px}
+  .nav .brand small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+  .nav button{flex:0 0 auto;flex-direction:row;justify-content:flex-start;gap:10px;font-size:14px;padding:10px 12px;border-radius:10px}
+  .nav button.on{background:var(--accent-soft)}
+  main{padding-block:28px 48px;padding-inline:32px}
+}
+.screen{display:none;animation:fade .18s ease}
+.screen.on{display:block}
+@keyframes fade{from{opacity:.6}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.screen{animation:none}}
+h1{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:17px;margin:0 0 10px}
+.sub{color:var(--ink-2);font-size:13px;margin:4px 0 0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.month{display:flex;align-items:center;gap:6px}
+.month button{background:var(--surface);border:1px solid var(--line);border-radius:8px;width:34px;height:34px;font-size:16px;color:var(--ink-2);cursor:pointer}
+.month strong{font-family:var(--display);font-size:16px;font-weight:600;min-width:130px;text-align:center}
+.seg{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px;margin-bottom:16px;overflow-x:auto}
+.seg button{flex:1;border:0;background:none;font:inherit;font-size:13px;font-weight:500;color:var(--ink-2);padding:8px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.grid.wide{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.card.flat{background:transparent;border-style:dashed}
+.stat .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.stat .val{font-family:var(--display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:4px;line-height:1.1}
+.stat .val.hero{font-size:36px;color:var(--accent)}
+@media (max-width:480px){.stat .val{font-size:22px}.stat .val.hero{font-size:28px}.grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}
+.stat .delta{font-size:12px;color:var(--ink-2);margin-top:6px}
+.num{font-variant-numeric:tabular-nums}
+.pos{color:var(--good)}.neg{color:var(--bad)}.warnc{color:var(--warn)}
+.rows{display:flex;flex-direction:column}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .l{color:var(--ink-2);font-size:13px;min-width:0}
+.row .l b{color:var(--ink);font-weight:500}
+.row .l small{display:block;color:var(--ink-3);font-size:11px}
+.row .v{font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.row.total{border-top:2px solid var(--line);font-weight:600}
+.row.total .l{color:var(--ink)}
+.note{font-size:12px;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:8px 10px;margin-top:10px}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);vertical-align:middle}
+.pill.ok{background:var(--accent-soft);color:var(--accent)}
+.pill.todo{background:#fff1d6;color:var(--warn)}
+:root[data-theme="dark"] .pill.todo{background:#3a2c14}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.todo{background:#3a2c14}}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.two{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:760px){.two{grid-template-columns:1fr 1fr}}
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:var(--body);font-size:11px;fill:var(--ink-2)}
+.chart .axis{stroke:var(--line)}
+.chart .grid{stroke:var(--line);stroke-dasharray:2 3}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend i.line{height:3px;border-radius:2px;vertical-align:3px}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:50;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctl label{font-size:12px;color:var(--ink-2);display:flex;justify-content:space-between}
+.ctl label output{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select,input[type=text],input[type=number]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:10px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:focus-visible,.chip:focus-visible,.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.drop{border:2px dashed var(--line);border-radius:var(--radius);padding:22px 16px;text-align:center;color:var(--ink-2);font-size:13px}
+.drop b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.switch:first-child{border-top:0}
+.tgl{width:44px;height:26px;border-radius:999px;background:var(--grey);position:relative;border:0;cursor:pointer;flex:0 0 auto;padding:0}
+.tgl::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.tgl.on{background:var(--accent)}.tgl.on::after{left:21px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{text-align:right;white-space:nowrap}
+.tbl .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.scroll{overflow-x:auto}
+.kink{font-size:13px;color:var(--ink-2);margin-top:8px}
+.kink b{color:var(--ink)}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:6px}
+.example{font-size:11px;color:var(--ink-3);margin-top:16px;text-align:center}
+.bar{display:flex;align-items:center;gap:10px;font-size:13px;padding:5px 0}
+.bar .n{width:130px;color:var(--ink-2);flex:0 0 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .t{flex:1;height:14px;position:relative;background:var(--surface-2);border-radius:4px}
+.bar .f{position:absolute;left:0;top:0;bottom:0;background:var(--s1);border-radius:4px}
+.bar .m{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.bar .v{width:78px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500;flex:0 0 auto}
+.bar .d{width:52px;text-align:right;font-size:12px;flex:0 0 auto}
+@media (max-width:480px){.bar .n{width:96px}.bar .d{display:none}}
+</style>
+
+<div class="app">
+  <nav class="nav" id="nav">
+    <div class="brand">HouseSaver<small>Stijn &amp; partner</small></div>
+    <button data-s="maand" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Maand</button>
+    <button data-s="uitgaven"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Uitgaven</button>
+    <button data-s="winkel"><svg viewBox="0 0 24 24"><path d="M3 4h2l2 12h11l2-8H7"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>Winkel</button>
+    <button data-s="sparen"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 5-7 4 4"/><path d="M3 21h18"/></svg>Sparen</button>
+    <button data-s="projectie"><svg viewBox="0 0 24 24"><path d="M3 21V11l9-7 9 7v10"/><path d="M9 21v-6h6v6"/></svg>Projectie</button>
+    <button data-s="meer"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>Meer</button>
+  </nav>
+
+  <main>
+    <!-- DEZE MAAND -->
+    <section class="screen on" id="s-maand">
+      <div class="head">
+        <div><h1>Deze maand</h1><p class="sub">Laatste volledige maand. Cijfers uit de bank, eigen overschrijvingen niet meegeteld.</p></div>
+        <div class="month"><button aria-label="vorige maand">‹</button><strong>september 2026</strong><button aria-label="volgende maand">›</button></div>
+      </div>
+      <div class="seg" id="seg-maand">
+        <button data-p="hh" class="on">Huishouden</button><button data-p="st">Stijn</button><button data-p="pa">Partner</button><button data-p="gz">Gezamenlijk</button>
+      </div>
+
+      <div id="p-hh" class="stack">
+        <div class="grid">
+          <div class="card stat"><div class="label">In</div><div class="val num" id="hh-in"></div><div class="delta">lonen op de bank</div></div>
+          <div class="card stat"><div class="label">Uit</div><div class="val num" id="hh-uit"></div><div class="delta">alle uitgaven, alle rekeningen</div></div>
+          <div class="card stat"><div class="label">Gespaard</div><div class="val hero num" id="hh-sp"></div><div class="delta">in − uit, waar het geld ook staat</div></div>
+        </div>
+        <div class="two">
+          <div class="card">
+            <h2>Waar staat het gespaarde geld</h2>
+            <div class="rows">
+              <div class="row"><span class="l"><b>Naar spaar- en beleggingsrekeningen</b><small>eigen overschrijvingen, netto</small></span><span class="v num" id="hh-moved"></span></div>
+              <div class="row"><span class="l"><b>Blijft op de zichtrekeningen</b><small>gespaard − verplaatst</small></span><span class="v num" id="hh-left"></span></div>
+            </div>
+            <div class="note">Maaltijdcheques zitten niet in deze cijfers. Deze maand uitgegeven: <b class="num">€ 340,00</b>.</div>
+          </div>
+          <div class="card">
+            <h2>Vergelijking met vorige maanden</h2>
+            <svg class="chart" id="c-saved" viewBox="0 0 420 150" role="img" aria-label="Gespaard per maand, laatste 6 maanden"></svg>
+            <div class="legend"><span><i style="background:var(--s1)"></i>gespaard</span><span><i class="line" style="background:var(--ink)"></i>mediaan 6 maanden</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="p-st" class="stack" hidden></div>
+      <div id="p-pa" class="stack" hidden></div>
+      <div id="p-gz" class="stack" hidden></div>
+      <p class="example">Alle bedragen zijn voorbeeldcijfers.</p>
+    </section>
+
+    <!-- WAAR GAAT HET HEEN -->
+    <section class="screen" id="s-uitgaven">
+      <div class="head"><div><h1>Waar gaat het heen</h1><p class="sub">Per categorie, vergeleken met het gemiddelde van de 3 vorige maanden (streepje).</p></div>
+        <div class="month"><button aria-label="vorige maand">‹</button><strong>september 2026</strong><button aria-label="volgende maand">›</button></div></div>
+      <div class="stack">
+        <div class="card"><h2>Per categorie</h2><div id="cats"></div>
+          <div class="legend"><span><i style="background:var(--s1)"></i>deze maand</span><span><i class="line" style="background:var(--ink)"></i>gemiddelde 3 maanden</span></div></div>
+        <div class="two">
+          <div class="card"><h2>Grootste tegenpartijen</h2><div class="rows" id="cps"></div></div>
+          <div class="card"><h2>Vaste kosten en abonnementen</h2><div class="rows" id="fixed"></div>
+            <div class="note">Herkend als terugkerend: zelfde tegenpartij, zelfde bedrag ±5 %, elke maand.</div></div>
+        </div>
+        <div class="card flat"><h2>Papier versus werkelijkheid <span class="pill">optioneel</span></h2>
+          <p class="sub">Eén keer je papieren budget invullen, dan toont deze kaart per categorie het verschil. Geen doelen, geen balkjes.</p>
+          <div class="rows" style="margin-top:8px">
+            <div class="row"><span class="l">Verwacht gespaard (op papier)</span><span class="v num">€ 2.500,00</span></div>
+            <div class="row"><span class="l">Werkelijk gespaard</span><span class="v num" id="paper-real"></span></div>
+            <div class="row total"><span class="l">Verschil</span><span class="v num neg" id="paper-diff"></span></div>
+          </div></div>
+      </div>
+    </section>
+
+    <!-- BOODSCHAPPEN -->
+    <section class="screen" id="s-winkel">
+      <div class="head"><div><h1>Boodschappen</h1><p class="sub">Colruyt-kastickets, gekoppeld aan de bankverrichting. Cheques apart geteld.</p></div>
+        <div class="month"><button aria-label="vorige maand">‹</button><strong>september 2026</strong><button aria-label="volgende maand">›</button></div></div>
+      <div class="stack">
+        <div class="grid">
+          <div class="card stat"><div class="label">Bankkaart</div><div class="val num">€ 720,40</div><div class="delta">in "Uit" van deze maand</div></div>
+          <div class="card stat"><div class="label">Maaltijdcheques</div><div class="val num">€ 340,00</div><div class="delta">niet in "Uit"</div></div>
+          <div class="card stat"><div class="label">Echte voedingskost</div><div class="val hero num">€ 1.060,40</div><div class="delta">kaart + cheques</div></div>
+        </div>
+        <div class="two">
+          <div class="card"><h2>Per productgroep</h2><svg class="chart" id="c-items" viewBox="0 0 420 160" role="img" aria-label="Uitgaven per productgroep"></svg>
+            <div class="legend" id="lg-items"></div></div>
+          <div class="card"><h2>Kastickets deze maand</h2><div class="rows" id="tickets"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPAREN -->
+    <section class="screen" id="s-sparen">
+      <div class="head"><div><h1>Sparen en rendement</h1><p class="sub">Saldo per rekening. Rente en getrouwheidspremie uit het Belfius-bestand, beleggingswaarde maandelijks ingetypt.</p></div></div>
+      <div class="stack">
+        <div class="card"><h2>Saldo per rekening, laatste 12 maanden</h2>
+          <svg class="chart" id="c-bal" viewBox="0 0 640 220" role="img" aria-label="Saldo per rekening"></svg>
+          <div class="legend"><span><i style="background:var(--s1)"></i>Spaarrekening Stijn</span><span><i style="background:var(--s2)"></i>Spaarrekening partner</span><span><i style="background:var(--s3)"></i>Beleggingen</span></div></div>
+        <div class="two">
+          <div class="card"><h2>Laatste 12 maanden</h2><div class="rows">
+            <div class="row"><span class="l">Eigen stortingen, netto</span><span class="v num">€ 10.900,00</span></div>
+            <div class="row"><span class="l"><b>Rendement</b><small>rente 1 jan, premie per kwartaal, beleggingen: waarde − stortingen</small></span><span class="v num pos">+ € 612,38</span></div>
+            <div class="row"><span class="l">Roerende voorheffing</span><span class="v num neg">− € 0,00</span></div>
+            <div class="row total"><span class="l">Totaal eigen middelen nu</span><span class="v num" id="own-now"></span></div>
+          </div></div>
+          <div class="card"><h2>Rendement per rekening</h2><div class="rows">
+            <div class="row"><span class="l"><b>Spaarrekening Stijn</b><small>basisrente + premie</small></span><span class="v num">€ 214,60 · 1,3 %</span></div>
+            <div class="row"><span class="l"><b>Spaarrekening partner</b><small>basisrente + premie</small></span><span class="v num">€ 171,78 · 1,3 %</span></div>
+            <div class="row"><span class="l"><b>Beleggingen</b><small>waarde 30/09 − waarde 30/09 vorig jaar − stortingen</small></span><span class="v num">€ 226,00 · 4,1 %</span></div>
+          </div><div class="note">Let op: geld verplaatsen tussen eigen spaarrekeningen kan de 12-maandenteller van de getrouwheidspremie herstarten.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTIE -->
+    <section class="screen" id="s-projectie">
+      <div class="head"><div><h1>Projectie</h1><p class="sub">Aan jullie werkelijke spaartempo. Geen doel, wel een antwoord: hoeveel hebben we dan, en wat kunnen we bieden.</p></div></div>
+      <div class="stack">
+        <div class="card">
+          <div class="two">
+            <div class="ctl"><label>Horizon <output id="o-years"></output></label><input type="range" id="i-years" min="1" max="10" step="1" value="5"></div>
+            <div class="ctl"><label>Woningtype (Oost-Vlaanderen, mediaan 2025)</label><select id="i-type"><option value="halfopen">Halfopen bebouwing — € 310.000</option><option value="open">Open bebouwing — € 448.000</option></select></div>
+            <div class="ctl"><label>Prijsgroei per jaar <output id="o-growth"></output></label><input type="range" id="i-growth" min="0" max="8" step="0.5" value="4"></div>
+            <div class="ctl"><label>Rentevoet (25 jaar vast) <output id="o-rate"></output></label><input type="range" id="i-rate" min="2.5" max="5.5" step="0.25" value="4"></div>
+          </div>
+          <div class="eyebrow" style="margin-top:14px">Scenario's</div>
+          <div class="chips">
+            <button class="chip" id="ch-55">Stijn naar 5/5</button>
+            <button class="chip" id="ch-raise">Loonsverhoging +3 %</button>
+            <button class="chip" id="ch-goal">Toon benodigde eigen inbreng</button>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card stat"><div class="label">Eigen middelen over <span id="y1"></span> jaar</div><div class="val hero num" id="r-own"></div><div class="delta">laag <span class="num" id="r-own-lo"></span> · hoog <span class="num" id="r-own-hi"></span></div></div>
+          <div class="card stat"><div class="label">Maximaal bod</div><div class="val num" id="r-bid"></div><div class="delta">laag <span class="num" id="r-bid-lo"></span> · hoog <span class="num" id="r-bid-hi"></span></div></div>
+          <div class="card stat"><div class="label">Verwachte woningprijs</div><div class="val num" id="r-price"></div><div class="delta" id="r-verdict"></div></div>
+        </div>
+        <div class="card">
+          <h2>Eigen middelen in de tijd</h2>
+          <svg class="chart" id="c-proj" viewBox="0 0 640 240" role="img" aria-label="Projectie eigen middelen"></svg>
+          <div class="legend"><span><i style="background:var(--band)"></i>laag – hoog</span><span><i class="line" style="background:var(--s1)"></i>verwacht</span><span id="lg-goal" hidden><i class="line" style="background:var(--s2)"></i>eigen inbreng nodig voor de mediaanwoning</span></div>
+          <p class="kink" id="kink"></p>
+        </div>
+        <div class="card"><h2>Rekenregels <span class="pill">alles instelbaar</span></h2>
+          <div class="scroll"><table class="tbl">
+            <tr><th>Regel</th><th>Waarde</th><th>Bron</th></tr>
+            <tr><td>Lening ≤ 90 % van de prijs</td><td class="num">90 %</td><td>NBB-richtwaarde, geen wet</td></tr>
+            <tr><td>Afbetaling + verzekeringen ≤ % netto inkomen</td><td class="num">38 %</td><td>leenhelder.be; banken: ⅓ tot 40 %</td></tr>
+            <tr><td>Schuldsaldo + brandverzekering</td><td class="num">€ 110 / maand</td><td>schatting voor twee ontleners</td></tr>
+            <tr><td>Verkooprecht enige eigen woning</td><td class="num">2 %</td><td>Vlaanderen, sinds 2025</td></tr>
+            <tr><td>Hypotheekrechten</td><td class="num">1,3 % op 110 % lening</td><td>notaris.be</td></tr>
+            <tr><td>Notariskosten</td><td class="num">schaal + 21 % btw</td><td>KB 1950, hervorming 2023</td></tr>
+            <tr><td>Vaste aktekosten + dossierkosten</td><td class="num">€ 1.793 + € 500</td><td>te ijken op notaris.be</td></tr>
+            <tr><td>Spaartempo laag / verwacht / hoog</td><td class="num">P25 / mediaan / P75</td><td>laatste 6 volledige maanden</td></tr>
+          </table></div></div>
+      </div>
+    </section>
+
+    <!-- MEER -->
+    <section class="screen" id="s-meer">
+      <div class="head"><div><h1>Meer</h1><p class="sub">Importeren, controleren, instellingen.</p></div></div>
+      <div class="seg" id="seg-meer"><button data-p="imp" class="on">Importeren</button><button data-p="rev">Te controleren <span class="pill todo">4</span></button><button data-p="set">Instellingen</button></div>
+
+      <div id="p-imp" class="stack">
+        <div class="drop"><b>Sleep bestanden hierheen of tik om te kiezen</b>Belfius-export (CSV of PDF), Belfius kredietkaartstaat (PDF), Colruyt kasticket (PDF). Wanneer je wil, overlappende periodes worden herkend.</div>
+        <div class="card"><h2>Laatste imports</h2><div class="scroll"><table class="tbl">
+          <tr><th>Wanneer</th><th>Bestand</th><th>Rekening</th><th>Nieuw</th><th>Dubbel</th><th>Status</th></tr>
+          <tr><td>2 okt</td><td class="mono">BE56 …0588 2026-10-02.csv</td><td>Stijn zicht</td><td class="num">47</td><td class="num">12</td><td><span class="pill ok">saldo klopt</span></td></tr>
+          <tr><td>2 okt</td><td class="mono">BE27 …9473 2026-10-02.csv</td><td>Gezamenlijk</td><td class="num">63</td><td class="num">0</td><td><span class="pill ok">saldo klopt</span></td></tr>
+          <tr><td>1 okt</td><td class="mono">Uitgavenstaat 09-2026.pdf</td><td>Kredietkaart Stijn</td><td class="num">18</td><td class="num">0</td><td><span class="pill ok">gekoppeld aan afrekening</span></td></tr>
+          <tr><td>28 sep</td><td class="mono">Kasticket_27092026_18h12_….pdf</td><td>Colruyt</td><td class="num">1</td><td class="num">0</td><td><span class="pill todo">wacht op bankverrichting</span></td></tr>
+          <tr><td>14 sep</td><td class="mono">BE67 …2387 2026-09-14.csv</td><td>Spaar partner</td><td class="num">3</td><td class="num">2</td><td><span class="pill bad">saldo wijkt € 12,50 af</span></td></tr>
+        </table></div></div>
+      </div>
+
+      <div id="p-rev" class="stack" hidden>
+        <div class="card"><h2>Onbekende verrichtingen</h2><p class="sub">Kies één keer een categorie, de regel wordt onthouden.</p>
+          <div class="rows" style="margin-top:8px" id="queue"></div></div>
+      </div>
+
+      <div id="p-set" class="stack" hidden>
+        <div class="card"><h2>Rekeningen</h2><div class="scroll"><table class="tbl">
+          <tr><th>IBAN</th><th>Eigenaar</th><th>Type</th><th>Telt als eigen inbreng</th></tr>
+          <tr><td class="mono">BE56 …0588</td><td>Stijn</td><td>Zicht</td><td>nee</td></tr>
+          <tr><td class="mono">BE67 …2387</td><td>Stijn</td><td>Spaar</td><td>ja</td></tr>
+          <tr><td class="mono">BE79 …1333</td><td>Stijn</td><td>Beleggingen</td><td>ja</td></tr>
+          <tr><td class="mono">5169 20XX XXXX 4795</td><td>Stijn</td><td>Kredietkaart</td><td>—</td></tr>
+          <tr><td class="mono">BE63 …2108</td><td>Partner</td><td>Zicht</td><td>nee</td></tr>
+          <tr><td class="mono">BE71 …0469</td><td>Partner</td><td>Spaar</td><td>ja</td></tr>
+          <tr><td class="mono">BE27 …9473</td><td>Gezamenlijk</td><td>Zicht</td><td>nee</td></tr>
+        </table></div><div class="note">Alles wat tussen deze rekeningen beweegt is een eigen overschrijving, nooit een uitgave of inkomst.</div></div>
+
+        <div class="card"><h2>Zichtbaarheid</h2><p class="sub">Details van persoonlijke rekeningen zijn pas voor de ander zichtbaar als jullie allebei akkoord gaan.</p>
+          <div class="rows" style="margin-top:8px">
+            <div class="switch"><span>Stijn gaat akkoord</span><button class="tgl on" id="tg-st" aria-pressed="true" aria-label="Stijn akkoord"></button></div>
+            <div class="switch"><span>Partner gaat akkoord</span><button class="tgl" id="tg-pa" aria-pressed="false" aria-label="Partner akkoord"></button></div>
+          </div><div class="note" id="vis-note"></div></div>
+
+        <div class="card"><h2>Parameters projectie</h2><div class="rows">
+          <div class="row"><span class="l">Netto gezinsinkomen per maand<small>standaard: mediaan van de ingelezen lonen</small></span><span class="v num">€ 4.980</span></div>
+          <div class="row"><span class="l">Huur nu</span><span class="v num">€ 950</span></div>
+          <div class="row"><span class="l">Stijn 5/5 netto (uit loonsimulatie)</span><span class="v num">€ 3.180</span></div>
+          <div class="row"><span class="l">Woningprijs referentie<small>Statbel, Oost-Vlaanderen, mediaan 2025</small></span><span class="v num">halfopen € 310.000 · open € 448.000</span></div>
+        </div></div>
+
+        <div class="card"><h2>Gegevens</h2><p class="sub">Eén zip: SQL-dump, JSON per tabel, alle originele CSV's en PDF's. Jouw eigen labels zitten erbij, die van je partner niet.</p>
+          <div class="chips" style="margin-top:10px"><button class="btn">Alles exporteren</button><button class="btn ghost">Taal: Nederlands</button></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="tip" role="status"></div>
+
+<script>
+(function(){
+const eur = n => { const s = Math.abs(n).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.'); return (n<0?'− ':'') + '€\u00a0' + s; };
+const eur0 = n => { const s = Math.round(Math.abs(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'); return (n<0?'− ':'') + '€\u00a0' + s; };
+const $ = id => document.getElementById(id);
+const tip = $('tip');
+function showTip(e, html){ tip.innerHTML = html; tip.style.opacity = 1; moveTip(e); }
+function moveTip(e){ const x = e.clientX, y = e.clientY; tip.style.left = Math.min(x + 12, window.innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (y - 34) + 'px'; }
+function hideTip(){ tip.style.opacity = 0; }
+function hover(el, html){ el.addEventListener('mouseenter', e=>showTip(e,html)); el.addEventListener('mousemove', moveTip); el.addEventListener('mouseleave', hideTip); el.addEventListener('touchstart', e=>{ showTip(e.touches[0], html); setTimeout(hideTip, 1600); }, {passive:true}); }
+const svgNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent){ const n = document.createElementNS(svgNS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+
+/* ---------- navigation ---------- */
+const navBtns = document.querySelectorAll('#nav button');
+function go(s){ navBtns.forEach(b => b.classList.toggle('on', b.dataset.s === s)); document.querySelectorAll('.screen').forEach(x => x.classList.toggle('on', x.id === 's-' + s)); try{ localStorage.setItem('hs-screen', s);}catch(e){} window.scrollTo(0,0); }
+navBtns.forEach(b => b.addEventListener('click', () => go(b.dataset.s)));
+function seg(id, prefix){ const btns = document.querySelectorAll('#' + id + ' button'); btns.forEach(b => b.addEventListener('click', () => { btns.forEach(x => x.classList.toggle('on', x === b)); btns.forEach(x => { $(prefix + x.dataset.p).hidden = x !== b; }); })); }
+seg('seg-maand', 'p-'); seg('seg-meer', 'p-');
+try{ const s = localStorage.getItem('hs-screen'); if (s && $('s-' + s)) go(s); }catch(e){}
+const h = location.hash.replace('#','');
+if (h && $('s-' + h)) go(h);
+
+/* ---------- example data ---------- */
+const data = {
+  stijn:   { loon: 2650, naarGezamenlijk: 1400, eigenUit: 540, kaart: 312, spaarStorting: 500, spaarSaldo: 18420, belegSaldo: 6200, kaartSaldo: 312 },
+  partner: { loon: 2330, naarGezamenlijk: 1200, eigenUit: 480, kaart: 218, spaarStorting: 300, spaarSaldo: 14900, belegSaldo: 0,    kaartSaldo: 218 },
+  gezamenlijk: { in: 2600, huur: 950, vast: 610, boodschappen: 720.40, andere: 229.60, saldoBegin: 1840 },
+  gespaardPerMaand: [ ['apr', 1240], ['mei', 610], ['jun', 1980], ['jul', 720], ['aug', 890], ['sep', 0] ],
+};
+const g = data.gezamenlijk;
+const hhIn = data.stijn.loon + data.partner.loon;
+const hhUit = data.stijn.eigenUit + data.stijn.kaart + data.partner.eigenUit + data.partner.kaart + g.huur + g.vast + g.boodschappen + g.andere;
+const hhSp = hhIn - hhUit;
+const moved = data.stijn.spaarStorting + data.partner.spaarStorting;
+data.gespaardPerMaand[5][1] = Math.round(hhSp);
+$('hh-in').textContent = eur(hhIn); $('hh-uit').textContent = eur(hhUit); $('hh-sp').textContent = eur(hhSp);
+$('hh-moved').textContent = eur(moved); $('hh-left').textContent = eur(hhSp - moved);
+$('paper-real').textContent = eur(hhSp); $('paper-diff').textContent = eur(hhSp - 2500);
+$('own-now').textContent = eur(data.stijn.spaarSaldo + data.stijn.belegSaldo + data.partner.spaarSaldo);
+
+function personPanel(id, name, d){
+  const uit = d.naarGezamenlijk + d.eigenUit + d.kaart;
+  const sp = d.loon - uit;
+  $(id).innerHTML = `
+    <div class="grid">
+      <div class="card stat"><div class="label">In</div><div class="val num">${eur(d.loon)}</div><div class="delta">loon op zichtrekening</div></div>
+      <div class="card stat"><div class="label">Uit</div><div class="val num">${eur(uit)}</div><div class="delta">incl. bijdrage gezamenlijk</div></div>
+      <div class="card stat"><div class="label">Gespaard</div><div class="val hero num">${eur(sp)}</div><div class="delta">${name} deze maand</div></div>
+    </div>
+    <div class="two">
+      <div class="card"><h2>Zichtrekening</h2><div class="rows">
+        <div class="row"><span class="l">Loon</span><span class="v num pos">+ ${eur(d.loon)}</span></div>
+        <div class="row"><span class="l"><b>Bijdrage gezamenlijke rekening</b><small>overschrijving, telt als uit voor ${name}</small></span><span class="v num">− ${eur(d.naarGezamenlijk)}</span></div>
+        <div class="row"><span class="l">Eigen uitgaven met bankkaart en cash</span><span class="v num">− ${eur(d.eigenUit)}</span></div>
+        <div class="row"><span class="l"><b>Naar spaarrekening</b><small>eigen overschrijving, geen uitgave</small></span><span class="v num" style="color:var(--ink-3)">${eur(d.spaarStorting)} →</span></div>
+      </div></div>
+      <div class="stack">
+        <div class="card"><h2>Spaarrekening${name === 'Stijn' ? ' en beleggingen' : ''}</h2><div class="rows">
+          <div class="row"><span class="l">Gestort deze maand</span><span class="v num">${eur(d.spaarStorting)}</span></div>
+          <div class="row"><span class="l">Rente en premie deze maand</span><span class="v num">${eur(0)}</span></div>
+          <div class="row total"><span class="l">Saldo spaarrekening</span><span class="v num">${eur(d.spaarSaldo)}</span></div>
+          ${d.belegSaldo ? `<div class="row total"><span class="l">Waarde beleggingen (ingetypt 30/09)</span><span class="v num">${eur(d.belegSaldo)}</span></div>` : ''}
+        </div></div>
+        <div class="card"><h2>Kredietkaart</h2><div class="rows">
+          <div class="row"><span class="l"><b>Uitgaven deze maand</b><small>uit de maandelijkse uitgavenstaat (PDF)</small></span><span class="v num">− ${eur(d.kaart)}</span></div>
+          <div class="row"><span class="l"><b>Afrekening op zichtrekening</b><small>eigen overschrijving naar de kaart, telt niet dubbel</small></span><span class="v num" style="color:var(--ink-3)">15 okt</span></div>
+        </div></div>
+      </div>
+    </div>`;
+}
+personPanel('p-st', 'Stijn', data.stijn);
+personPanel('p-pa', 'partner', data.partner);
+$('p-gz').innerHTML = `
+  <div class="grid">
+    <div class="card stat"><div class="label">In</div><div class="val num">${eur(g.in)}</div><div class="delta">bijdragen van jullie beiden</div></div>
+    <div class="card stat"><div class="label">Uit</div><div class="val num">${eur(g.huur + g.vast + g.boodschappen + g.andere)}</div><div class="delta">huur, vaste kosten, boodschappen</div></div>
+    <div class="card stat"><div class="label">Saldo verandert</div><div class="val hero num">${eur(g.in - (g.huur + g.vast + g.boodschappen + g.andere))}</div><div class="delta">blijft op de gezamenlijke rekening</div></div>
+  </div>
+  <div class="card"><h2>Gezamenlijke zichtrekening</h2><div class="rows">
+    <div class="row"><span class="l">Bijdrage Stijn</span><span class="v num pos">+ ${eur(data.stijn.naarGezamenlijk)}</span></div>
+    <div class="row"><span class="l">Bijdrage partner</span><span class="v num pos">+ ${eur(data.partner.naarGezamenlijk)}</span></div>
+    <div class="row"><span class="l">Huur</span><span class="v num">− ${eur(g.huur)}</span></div>
+    <div class="row"><span class="l">Vaste kosten (energie, water, internet, verzekeringen)</span><span class="v num">− ${eur(g.vast)}</span></div>
+    <div class="row"><span class="l">Boodschappen met bankkaart</span><span class="v num">− ${eur(g.boodschappen)}</span></div>
+    <div class="row"><span class="l">Andere</span><span class="v num">− ${eur(g.andere)}</span></div>
+  </div><div class="note">Bijdragen zijn eigen overschrijvingen: ze tellen als "uit" bij de persoon en als "in" hier, en vallen weg in het huishoudtotaal.</div></div>`;
+
+/* ---------- saved per month chart ---------- */
+(function(){
+  const svg = $('c-saved'), W = 420, H = 150, pl = 44, pr = 8, pt = 10, pb = 24;
+  const vals = data.gespaardPerMaand; const max = 2200;
+  const sorted = vals.map(v=>v[1]).sort((a,b)=>a-b); const med = (sorted[2]+sorted[3])/2;
+  const y = v => pt + (H - pt - pb) * (1 - v / max);
+  [0, 1000, 2000].forEach(t => { el('line', {x1:pl, x2:W-pr, y1:y(t), y2:y(t), class:'grid'}, svg); el('text', {x:pl-6, y:y(t)+4, 'text-anchor':'end'}, svg).textContent = t ? (t/1000)+'k' : '0'; });
+  const bw = (W - pl - pr) / vals.length;
+  vals.forEach((v, i) => {
+    const x = pl + i * bw + bw * 0.2, w = bw * 0.6;
+    const r = el('rect', {x, y:y(v[1]), width:w, height:y(0)-y(v[1]), rx:4, fill:'var(--s1)', opacity: i===5 ? 1 : .7}, svg);
+    el('text', {x:x+w/2, y:H-8, 'text-anchor':'middle'}, svg).textContent = v[0];
+    hover(r, `${v[0]}: ${eur(v[1])}`);
+  });
+  el('line', {x1:pl, x2:W-pr, y1:y(med), y2:y(med), stroke:'var(--ink)', 'stroke-width':1.5}, svg);
+  el('text', {x:W-pr, y:y(med)-4, 'text-anchor':'end', 'font-weight':600}, svg).textContent = 'mediaan ' + eur0(med);
+})();
+
+/* ---------- categories ---------- */
+const cats = [ ['Huur', 950, 950], ['Boodschappen', 1020.40, 905], ['Kredietkaart, nog niet uitgesplitst', 530, 410], ['Vaste kosten', 610, 598], ['Eten buitenshuis', 380, 262], ['Vervoer', 290, 305], ['Cash (opgenomen = uitgegeven)', 200, 120], ['Overige', 175, 190], ['Abonnementen', 95, 95] ];
+const maxc = 1100;
+$('cats').innerHTML = cats.map(c => { const d = c[1] - c[2]; return `<div class="bar"><span class="n" title="${c[0]}">${c[0]}</span><span class="t"><span class="f" style="width:${c[1]/maxc*100}%"></span><span class="m" style="left:${c[2]/maxc*100}%"></span></span><span class="v">${eur0(c[1])}</span><span class="d ${d>40?'neg':d<-40?'pos':''}">${d>0?'+':''}${eur0(d).replace('€ ','')}</span></div>`; }).join('');
+document.querySelectorAll('#cats .bar').forEach((b, i) => hover(b, `${cats[i][0]}: ${eur(cats[i][1])} · gemiddelde ${eur(cats[i][2])}`));
+$('cps').innerHTML = [ ['COLRUYT (3 winkels)', 720.40], ['Immo Verhuur bv — huur', 950], ['Fluvius', 214], ['Kredietkaart Stijn — afrekening', 312], ['Telenet', 71], ['Bancontact P2P (nog te controleren)', 60] ].map(c => `<div class="row"><span class="l">${c[0]}</span><span class="v num">${eur(c[1])}</span></div>`).join('');
+$('fixed').innerHTML = [ ['Huur', 950], ['Energie (Fluvius + leverancier)', 214], ['Telenet', 71], ['Autoverzekering', 68], ['Netflix + Spotify', 25.98], ['Sportclub', 40] ].map(c => `<div class="row"><span class="l">${c[0]}</span><span class="v num">${eur(c[1])}</span></div>`).join('') + `<div class="row total"><span class="l">Per maand</span><span class="v num">${eur(1368.98)}</span></div>`;
+
+/* ---------- groceries ---------- */
+(function(){
+  const groups = [ ['Verse voeding', 412, 'var(--s1)'], ['Droge voeding en drank', 318, 'var(--s2)'], ['Huishouden en verzorging', 206, 'var(--s3)'], ['Leeggoed en korting', -24, 'var(--grey)'], ['Niet-voeding', 148.40, 'var(--s4)'] ];
+  const svg = $('c-items'), W = 420, H = 160, pl = 8, pt = 8;
+  const total = groups.reduce((a, g) => a + Math.abs(g[1]), 0);
+  let x = pl; const w = W - 16;
+  groups.forEach(gr => { const ww = Math.abs(gr[1]) / total * w - 2; const r = el('rect', {x, y:pt, width:ww, height:28, rx:4, fill:gr[2]}, svg); hover(r, `${gr[0]}: ${eur(gr[1])}`); x += ww + 2; });
+  const rows = [ ['Bankkaart (in Uit)', 720.40], ['Maaltijdcheques (apart)', 340] ];
+  rows.forEach((r, i) => { el('text', {x:pl, y:66 + i * 22}, svg).textContent = r[0]; el('text', {x:W-8, y:66 + i*22, 'text-anchor':'end', 'font-weight':600, fill:'var(--ink)'}, svg).textContent = eur(r[1]); });
+  el('text', {x:pl, y:124, fill:'var(--ink-3)'}, svg).textContent = 'Cheques worden eerst aan voeding toegewezen, de rest aan de kaart.';
+  el('text', {x:pl, y:142, fill:'var(--ink-3)'}, svg).textContent = 'Zo is "echte voedingskost" alleen voeding, niet de hele Colruyt-verrichting.';
+  $('lg-items').innerHTML = groups.map(gr => `<span><i style="background:${gr[2]}"></i>${gr[0]}</span>`).join('');
+})();
+$('tickets').innerHTML = [ ['za 27 sep 18:12', 'Colruyt Gent-Zuid', 118.40, 40, 'wacht op bankverrichting', 'todo'], ['za 20 sep 17:55', 'Colruyt Gent-Zuid', 96.20, 60, 'gekoppeld', 'ok'], ['di 16 sep 19:03', 'Colruyt Merelbeke', 41.05, 20, 'gekoppeld', 'ok'], ['za 13 sep 18:40', 'Colruyt Gent-Zuid', 132.75, 80, 'gekoppeld', 'ok'], ['za 6 sep 18:21', 'Colruyt Gent-Zuid', 104.10, 60, 'gekoppeld', 'ok'], ['wo 3 sep 12:10', 'Colruyt Gent-Zuid', 0, 80, 'volledig met cheques', 'ok'] ].map(t => `<div class="row"><span class="l"><b>${t[1]}</b><small>${t[0]} · kaart ${eur(t[2])} · cheques ${eur(t[3])}</small></span><span class="v"><span class="pill ${t[5]}">${t[4]}</span></span></div>`).join('');
+
+/* ---------- balances chart ---------- */
+(function(){
+  const svg = $('c-bal'), W = 640, H = 220, pl = 46, pr = 12, pt = 12, pb = 26;
+  const months = ['okt','nov','dec','jan','feb','mrt','apr','mei','jun','jul','aug','sep'];
+  const series = [
+    { c:'var(--s1)', v:[14200,14700,15200,15920,16420,16920,17420,17420,17920,18420,18420,18420] },
+    { c:'var(--s2)', v:[11800,12100,12400,12870,13170,13470,13770,14070,14370,14600,14900,14900] },
+    { c:'var(--s3)', v:[4100,4250,4380,4600,4780,4950,5200,5350,5600,5800,6050,6200] } ];
+  const max = 20000, x = i => pl + i * (W - pl - pr) / 11, y = v => pt + (H - pt - pb) * (1 - v / max);
+  [0, 5000, 10000, 15000, 20000].forEach(t => { el('line', {x1:pl, x2:W-pr, y1:y(t), y2:y(t), class:'grid'}, svg); el('text', {x:pl-6, y:y(t)+4, 'text-anchor':'end'}, svg).textContent = t ? (t/1000)+'k' : '0'; });
+  months.forEach((m, i) => el('text', {x:x(i), y:H-8, 'text-anchor':'middle'}, svg).textContent = m);
+  series.forEach(s => { el('path', {d: s.v.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' '), fill:'none', stroke:s.c, 'stroke-width':2}, svg); const last = s.v[11]; el('circle', {cx:x(11), cy:y(last), r:4, fill:s.c, stroke:'var(--surface)', 'stroke-width':2}, svg); el('text', {x:x(11)-8, y:y(last)-8, 'text-anchor':'end', 'font-weight':600, fill:'var(--ink)'}, svg).textContent = eur0(last); });
+  months.forEach((m, i) => { const r = el('rect', {x:x(i)-12, y:pt, width:24, height:H-pt-pb, fill:'transparent'}, svg); hover(r, `${m}: Stijn ${eur0(series[0].v[i])} · partner ${eur0(series[1].v[i])} · beleggingen ${eur0(series[2].v[i])}`); });
+})();
+
+/* ---------- projection ---------- */
+const P = { ownNow: data.stijn.spaarSaldo + data.stijn.belegSaldo + data.partner.spaarSaldo, saveLo: 700, saveMed: 1000, saveHi: 1350, netIncome: hhIn, dsti: .38, insurance: 110, ltv: .9, term: 25, regDuty: .02, mortDuty: .013, accessories: 1.10, fixed: 1793, dossier: 500, savingsReturn: .012,
+  price: { halfopen: 310000, open: 448000 }, stijnNow: 2650, stijn55: 3180 };
+function notary(base){ const br = [[7500,.0456],[17500,.0285],[30000,.0228],[45495,.0114],[64095,.0057],[Infinity,.00057]]; let fee = 0, prev = 0; for (const [top, rate] of br){ const span = Math.min(base, top) - prev; if (span <= 0) break; fee += span * rate; prev = top; } return fee * 1.21; }
+function costs(price, loan){ return P.regDuty * price + notary(price) * .88 + notary(loan * P.accessories) * .8 + P.mortDuty * loan * P.accessories + P.fixed + P.dossier; }
+function maxLoan(income, rate){ const budget = P.dsti * income - P.insurance; const r = Math.pow(1 + rate, 1/12) - 1, n = P.term * 12; return budget * (1 - Math.pow(1 + r, -n)) / r; }
+function maxBid(own, income, rate){ const cap = maxLoan(income, rate); let lo = 0, hi = 3e6; for (let i = 0; i < 60; i++){ const p = (lo + hi) / 2; const loan = Math.min(P.ltv * p, cap); if (p - loan + costs(p, loan) <= own) lo = p; else hi = p; } return { bid: lo, loan: Math.min(P.ltv * lo, cap), cap }; }
+function ownNeeded(price){ const loan = P.ltv * price; return price - loan + costs(price, loan); }
+function kinkPrice(income, rate){ return maxLoan(income, rate) / P.ltv; }
+function grow(start, monthly, months){ const r = P.savingsReturn / 12; let v = start; for (let m = 0; m < months; m++) v = v * (1 + r) + monthly; return v; }
+
+const ctl = { years: $('i-years'), type: $('i-type'), growth: $('i-growth'), rate: $('i-rate') };
+const chips = { c55: $('ch-55'), raise: $('ch-raise'), goal: $('ch-goal') };
+Object.values(chips).forEach(c => c.addEventListener('click', () => { c.classList.toggle('on'); render(); }));
+Object.values(ctl).forEach(c => c.addEventListener('input', render));
+
+function render(){
+  const years = +ctl.years.value, growth = +ctl.growth.value / 100, rate = +ctl.rate.value / 100;
+  const s55 = chips.c55.classList.contains('on'), raise = chips.raise.classList.contains('on'), goal = chips.goal.classList.contains('on');
+  $('o-years').textContent = years + (years === 1 ? ' jaar' : ' jaar'); $('o-growth').textContent = (growth*100).toFixed(1).replace('.',',') + ' %'; $('o-rate').textContent = (rate*100).toFixed(2).replace('.',',') + ' %'; $('y1').textContent = years;
+  let income = P.netIncome, extra = 0;
+  if (s55){ extra += P.stijn55 - P.stijnNow; income += P.stijn55 - P.stijnNow; }
+  if (raise){ extra += income * .03; income *= 1.03; }
+  const months = years * 12;
+  const own = { lo: grow(P.ownNow, P.saveLo + extra, months), med: grow(P.ownNow, P.saveMed + extra, months), hi: grow(P.ownNow, P.saveHi + extra, months) };
+  const bid = { lo: maxBid(own.lo, income, rate), med: maxBid(own.med, income, rate), hi: maxBid(own.hi, income, rate) };
+  const price = P.price[ctl.type.value] * Math.pow(1 + growth, years);
+  $('r-own').textContent = eur0(own.med); $('r-own-lo').textContent = eur0(own.lo); $('r-own-hi').textContent = eur0(own.hi);
+  $('r-bid').textContent = eur0(bid.med.bid); $('r-bid-lo').textContent = eur0(bid.lo.bid); $('r-bid-hi').textContent = eur0(bid.hi.bid);
+  $('r-price').textContent = eur0(price);
+  const diff = bid.med.bid - price;
+  $('r-verdict').innerHTML = diff >= 0 ? `<span class="pos">bod ligt ${eur0(diff)} boven de mediaan</span>` : `<span class="neg">bod ligt ${eur0(-diff)} onder de mediaan</span>`;
+  const kp = kinkPrice(income, rate), ko = ownNeeded(kp);
+  const regime = own.med < ko ? 'LTV' : 'inkomen';
+  $('kink').innerHTML = regime === 'LTV'
+    ? `Tot <b>${eur0(ko)}</b> eigen middelen (woning van ${eur0(kp)}) beperkt de 90 %-regel het bod: elke extra euro sparen is <b>± € 7,4 bod</b>. Daarboven beperkt het inkomen de lening en levert een euro extra nog <b>€ 0,98</b> op. Verwacht scenario: ${eur0(own.med)} → nog <b>${eur0(ko - own.med)}</b> tot dat punt.`
+    : `Vanaf <b>${eur0(ko)}</b> eigen middelen (woning van ${eur0(kp)}) beperkt het <b>inkomen</b> de lening (max ${eur0(bid.med.cap)}): een euro extra sparen levert nog € 0,98 bod op. Verwacht scenario zit daar <b>${eur0(own.med - ko)}</b> boven. Meer inkomen of een langere looptijd verschuift dit punt; meer sparen nauwelijks.`;
+  /* chart */
+  const svg = $('c-proj'); svg.innerHTML = '';
+  const W = 640, H = 240, pl = 50, pr = 14, pt = 14, pb = 26;
+  const N = months; const pts = { lo:[], med:[], hi:[], need:[] };
+  for (let m = 0; m <= N; m++){ pts.lo.push(grow(P.ownNow, P.saveLo + extra, m)); pts.med.push(grow(P.ownNow, P.saveMed + extra, m)); pts.hi.push(grow(P.ownNow, P.saveHi + extra, m)); pts.need.push(ownNeeded(P.price[ctl.type.value] * Math.pow(1 + growth, m/12))); }
+  const maxV = Math.max(pts.hi[N], goal ? pts.need[N] : 0) * 1.08;
+  const step = maxV > 150000 ? 50000 : maxV > 60000 ? 25000 : 10000;
+  const x = m => pl + m / N * (W - pl - pr), y = v => pt + (H - pt - pb) * (1 - v / maxV);
+  for (let t = 0; t <= maxV; t += step){ el('line', {x1:pl, x2:W-pr, y1:y(t), y2:y(t), class:'grid'}, svg); el('text', {x:pl-6, y:y(t)+4, 'text-anchor':'end'}, svg).textContent = t ? (t/1000)+'k' : '0'; }
+  for (let yr = 0; yr <= years; yr++){ el('text', {x:x(yr*12), y:H-8, 'text-anchor':'middle'}, svg).textContent = yr === 0 ? 'nu' : '+' + yr + 'j'; }
+  const path = arr => arr.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+  el('path', {d: path(pts.hi) + ' ' + pts.lo.map((v,i)=>'L'+x(N-i).toFixed(1)+' '+y(pts.lo[N-i]).toFixed(1)).join(' ') + ' Z', fill:'var(--band)'}, svg);
+  el('path', {d: path(pts.med), fill:'none', stroke:'var(--s1)', 'stroke-width':2.5}, svg);
+  if (goal){ el('path', {d: path(pts.need), fill:'none', stroke:'var(--s2)', 'stroke-width':2, 'stroke-dasharray':'6 4'}, svg); el('text', {x:x(N)-6, y:y(pts.need[N])-8, 'text-anchor':'end', fill:'var(--ink)', 'font-weight':600}, svg).textContent = 'nodig ' + eur0(pts.need[N]); }
+  $('lg-goal').hidden = !goal;
+  el('circle', {cx:x(N), cy:y(pts.med[N]), r:5, fill:'var(--s1)', stroke:'var(--surface)', 'stroke-width':2}, svg);
+  el('text', {x:x(N)-8, y:y(pts.med[N]) + (goal && pts.need[N] > pts.med[N] ? 16 : -10), 'text-anchor':'end', fill:'var(--ink)', 'font-weight':600}, svg).textContent = eur0(pts.med[N]);
+  for (let yr = 0; yr <= years; yr++){ const r = el('rect', {x:x(yr*12)-14, y:pt, width:28, height:H-pt-pb, fill:'transparent'}, svg); hover(r, `+${yr} jaar: ${eur0(pts.lo[yr*12])} – <b>${eur0(pts.med[yr*12])}</b> – ${eur0(pts.hi[yr*12])}${goal ? ' · nodig ' + eur0(pts.need[yr*12]) : ''}`); }
+}
+chips.goal.classList.add('on');
+render();
+
+/* ---------- review queue ---------- */
+const queue = [ ['BANCONTACT P2P MOBILE — J. Peeters', -60, '14 sep', 'Terugbetaling van een vriend, of uitgave?'], ['STORTING VAN BE.. STICHTING MOLLIE PAYMENTS — Terugbetaling', 34.99, '11 sep', 'Terugbetaling: verrekenen met de oorspronkelijke categorie'], ['BANCONTACT-AANKOOP — 4222 COLRUYT AARSCHOT', -41.05, '16 sep', 'Nieuwe winkel, regel "bevat COLRUYT" voorstellen'], ['OVERSCHRIJVING — BE.. TENNISCLUB LATEM', -240, '2 sep', 'Jaarlijkse kost, aan welke categorie?'] ];
+$('queue').innerHTML = queue.map(q => `<div class="row" style="align-items:center"><span class="l"><b class="mono" style="font-size:12px">${q[0]}</b><small>${q[2]} · ${q[3]}</small></span><span class="v"><span class="num ${q[1]<0?'':'pos'}" style="margin-right:10px">${eur(q[1])}</span><select style="width:auto;display:inline-block;padding:5px 8px;font-size:12px"><option>Kies categorie…</option><option>Boodschappen</option><option>Eten buitenshuis</option><option>Vervoer</option><option>Terugbetaling</option><option>Sport en hobby</option><option>Eigen overschrijving</option></select></span></div>`).join('');
+
+/* ---------- visibility toggle ---------- */
+const tg = { st: $('tg-st'), pa: $('tg-pa') };
+function visNote(){ const both = tg.st.classList.contains('on') && tg.pa.classList.contains('on'); $('vis-note').innerHTML = both ? '<b>Actief.</b> Jullie zien elkaars verrichtingen op de persoonlijke rekeningen.' : '<b>Niet actief.</b> Ieder ziet alleen de totalen van de ander. Wordt actief zodra jullie allebei akkoord gaan; wie zijn akkoord intrekt, schakelt het voor beiden uit.'; }
+Object.values(tg).forEach(t => t.addEventListener('click', () => { t.classList.toggle('on'); t.setAttribute('aria-pressed', t.classList.contains('on')); visNote(); }));
+visNote();
+})();
+</script>
