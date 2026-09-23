@@ -48,9 +48,8 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 25 | Property | Neither owns property or building land | The 2 % rate applies. The couple owns a car together (no effect on the bid; car costs are shared). |
 | 26 | Rent setting | Dropped | Rent is just a category. |
 | 27 | Goal line | Kept, user-set, shared between both users | A single adjustable amount (own money target) drawn on the projection chart; not a progress bar. |
-| 28 | Build order | Savings and projection before receipts | Builder's call in the absence of an answer; reversible. |
 | 29 | House-price reference | "Refresh" button: try Statbel open data, fall back to manual entry | Every figure stored with source and date. |
 
 ## Still open
 
-Mock-up remarks from Stijn. Cloudflare account setup steps (R2, Zero Trust with One-time PIN, API token in GitHub secrets, custom domain or workers.dev). Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).
+Build order after phase 1 (receipts first, or savings + projection first). Mock-up remarks from Stijn. Cloudflare account setup steps (R2, Zero Trust with One-time PIN, API token in GitHub secrets, custom domain or workers.dev). Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).

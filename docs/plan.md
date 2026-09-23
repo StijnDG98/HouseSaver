@@ -114,9 +114,11 @@ House-price reference: table `price_references` (type, region, period, value, so
 
 **Phase 1 — import and the €1,500 question.** Three PDF parsers with reconciliation and fixtures; account registry screen; upload screen (any time, any order); dedup; classifier; transfer pairing; rules + review queue; merchant aliases; categories editable; This-month view with the four tabs; Where-it-goes view; export zip + backup script. Exit: a full month of real statements imports cleanly, reconciles, and the household and per-person figures agree with a hand calculation; an export has been restored into a local SQLite file once.
 
-**Phase 2 — savings and projection.** Savings statements (two-column parsing); interest as return; investment values typed in; Savings view; projection screen with all parameters adjustable, user-defined scenarios, low/expected/high, goal line, kink text; price references with refresh. Exit: the projection reproduces the mock-up's example numbers from the same inputs, and a leenhelder.be example within 1 %.
+**Phase 2 and 3 — order not yet decided** (receipts first, or savings + projection first; written below in the order recommended in the review).
 
-**Phase 3 — receipts.** Receipt parser (Collect&Go and in-store); matching; voucher allocation; article map; Groceries view. Exit: the two real receipts match their statement lines automatically.
+**Savings and projection.** Savings statements (two-column parsing); interest as return; investment values typed in; Savings view; projection screen with all parameters adjustable, user-defined scenarios, low/expected/high, goal line, kink text; price references with refresh. Exit: the projection reproduces the mock-up's example numbers from the same inputs, and a leenhelder.be example within 1 %.
+
+**Receipts.** Receipt parser (Collect&Go and in-store); matching; voucher allocation; article map; Groceries view. Exit: the two real receipts match their statement lines automatically.
 
 **Phase 4 — polish.** Private tags; recurring-costs panel; Statbel refresh hardening; phone upload flow (share-to-app if wanted); anything from the mock-up remarks.
 
