@@ -26,9 +26,19 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 13 | Projection output | Low / expected / high range | Decided together in the brainstorm. Expected = median of the last 6 complete months, low/high = P25/P75. |
 | 14 | Cash | Withdrawal = spent (category "Cash"), deposit = earned | |
 | 15 | Projection target | Province Oost-Vlaanderen; house type semi-detached or detached (selectable); horizon variable | Statbel 2025 medians Oost-Vlaanderen: halfopen €310,000, open €448,000. |
-| 16 | Hosting | Not locked yet | Stijn wants Cloudflare Workers explained before confirming. |
-| 17 | Bank data source | Not decided | CSV was the assistant's assumption. Stijn leans to PDF for both Belfius and Colruyt; see review discussion. |
+| 16 | Hosting | Cloudflare Workers + D1 (eu) + R2 (eu) + Access | Confirmed after explanation. Residual accepted: Worker execution and Cloudflare login logs are not EU-pinned. |
+| 17 | Bank data source | PDF for everything: Belfius account statements, Belfius Mastercard statements, Colruyt receipts | Chosen for convenience (statements are in the Belfius app). Stijn states the statement layout has not changed in decades; the parser will reconcile every statement against its own opening and closing balance so a layout change fails loudly. Sample PDFs to follow. CSV import can be added later as a fallback. |
+
+## 2026-09-23 — third round
+
+| # | Topic | Decision | Notes |
+|---|---|---|---|
+| 18 | Bonuses in the projection | Excluded | Holiday pay and year-end bonus stay a "happy surprise": shown as separate income lines, never fed into the saving rate. |
+| 19 | Projection parameters | Every parameter adjustable on the projection screen itself | Not only in settings. |
+| 20 | Scenarios | User-defined, no premade ones | A scenario is a named set of overrides (income per person, saving rate, interest rate, price growth, horizon, LTV, income share, costs); users create as many as they want and compare them on the chart. |
+| 21 | Categories | Seed list plus user-created; names and descriptions editable | Seed: huur, boodschappen, eten buitenshuis, vervoer, abonnementen, gezondheid, cadeaus, cash, overige. |
+| 22 | Credit cards | Belfius Mastercard for both | Monthly "uitgavenstaat" PDF is the source; the settlement line on the current account is a transfer to the card account. |
 
 ## Still open (handoff review section 5B)
 
-Bonuses in the projection; voucher issuers; Colruyt payment method, e-mail receipts and a sample receipt; max-bid inputs (borrowers, existing loans, property owned, purpose of rent); goal line; build order; category seed list; credit-card issuer and statement format.
+Colruyt payment method (bank card vs Xtra mobile pay); max-bid inputs (both borrowers, existing loans, property owned, purpose of the rent setting); goal line on the projection chart; build order (receipts before or after savings + projection). Sample PDFs and mock-up remarks pending from Stijn.
