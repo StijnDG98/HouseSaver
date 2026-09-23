@@ -39,6 +39,18 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 21 | Categories | Seed list plus user-created; names and descriptions editable | Seed: huur, boodschappen, eten buitenshuis, vervoer, abonnementen, gezondheid, cadeaus, cash, overige. |
 | 22 | Credit cards | Belfius Mastercard for both | Monthly "uitgavenstaat" PDF is the source; the settlement line on the current account is a transfer to the card account. |
 
-## Still open (handoff review section 5B)
+## 2026-09-23 — fourth round
 
-Colruyt payment method (bank card vs Xtra mobile pay); max-bid inputs (both borrowers, existing loans, property owned, purpose of the rent setting); goal line on the projection chart; build order (receipts before or after savings + projection). Sample PDFs and mock-up remarks pending from Stijn.
+| # | Topic | Decision | Notes |
+|---|---|---|---|
+| 23 | Holiday pay and year-end bonus | No separate category or detection | Both arrive together with the wage as a larger salary line; treated as ordinary income in that month. Supersedes handoff data rule 4. Consequence: the bonus month shows a high "saved"; the projection's expected value (median) is robust to it, and low/high are computed so that a single outlier month does not set them. |
+| 24 | Borrowers | Both borrow together; no running loans | Both incomes count for the income limit; no existing debt deduction. |
+| 25 | Property | Neither owns property or building land | The 2 % rate applies. The couple owns a car together (no effect on the bid; car costs are shared). |
+| 26 | Rent setting | Dropped | Rent is just a category. |
+| 27 | Goal line | Kept, user-set, shared between both users | A single adjustable amount (own money target) drawn on the projection chart; not a progress bar. |
+| 28 | Build order | Savings and projection before receipts | Builder's call in the absence of an answer; reversible. |
+| 29 | House-price reference | "Refresh" button: try Statbel open data, fall back to manual entry | Every figure stored with source and date. |
+
+## Still open
+
+Mock-up remarks from Stijn. Cloudflare account setup steps (R2, Zero Trust with One-time PIN, API token in GitHub secrets, custom domain or workers.dev). Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).
