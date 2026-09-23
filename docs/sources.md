@@ -1,6 +1,6 @@
 # Data sources — verified formats
 
-Verified on real files supplied on 2026-09-23 (kept out of the repository). All three are text PDFs; extraction with a standard PDF text layer, layout preserved, is enough. Every example below is anonymised.
+Verified on six real files supplied on 2026-09-23 (kept out of the repository): two current-account statements (shared and personal), one savings-account statement, one Mastercard statement, two Collect&Go receipts (one paid partly with meal vouchers). All three are text PDFs; extraction with a standard PDF text layer, layout preserved, is enough. Every example below is anonymised.
 
 ## 1. Belfius account statement (rekeninguittreksel, PDF)
 
@@ -13,7 +13,9 @@ Verified on real files supplied on 2026-09-23 (kept out of the repository). All 
 - Colruyt store code position varies within one statement: `COLRUYT WETTEREN 3536` and `3536 COLRUYT WETTEREN`.
 - Booking date lags the purchase (value) date by 0–2 days in this sample; the purchase timestamp `dd/mm/yy hh:mm` in the text is the field to match receipts on.
 - Trailing page: `MEDEDELING PRODUCT` with an overview of ATM withdrawals at other banks; ignore.
-- Not yet seen: a savings-account statement, interest lines, salary lines, ATM withdrawal lines, the `MASTERCARD AFREKENING` settlement line. Expected from public exports; confirm on a personal-account statement.
+- Personal current-account statement: same layout, reconciles (21 transactions). Statements are roughly monthly on both current accounts (statement 8 of the year in early September). Additional line types: salary `STORTING VAN BEnn … <EMPLOYER> /A/ <payroll ref> REF. : … NAAR BEnn … <name>` (no word like "Wedde"; detect by employer IBAN, with an amount rule for holiday pay and bonus); `OVERSCHRIJVING BELFIUS MOBILE NAAR BEnn … <message>` (contribution to the shared account); `DOORLOPENDE BETALINGSOPDRACHT <nr> NAAR BEnn … BESCHIKBAAR 608,01 EUR -` (a sweep to savings: "keep at least X on the account, move the rest", so the amount varies each month); `MASTERCARD AFREKENING NUMMER nnn` (the card settlement, no counterparty; amount equals the uitgavenstaat total, date equals its "Datum van debet"); `BIJDRAGE IN DE BEHEERSKOSTEN VAN UW … -REKENING` (fee). Trailing `MEDEDELING PRODUCT` page lists standing-order registrations and cancellations; ignore for figures, but it names the savings IBANs.
+- **Savings-account statement**: same line grammar, but the PDF prints two logical pages **side by side** on one physical page (left = statement `1/1`, right = `MEDEDELING PRODUCT` `1/2`). Plain text extraction interleaves the columns and garbles the header; crop each page at half its width and parse the halves separately. Reconciles (3 transactions). Interest appears as `CREDITINTERESTEN` (booked 02-01, value 01-01) and `UITBETALING VAN UW GETROUWHEIDSPREMIE. ACTUEEL PERCENTAGE GETROUWHEIDSPREMIE : 1,25 %. ACTUEEL PERCENTAGE BASISRENTE : 0,15 %.`, both without counterparty. Savings statements are not monthly: this one covers 24-12 to 16-01 and is number 1 of the year, so the app must not assume a cadence. The right-hand column carries the withholding-tax note (exempt amount €1,020 per person for income year 2025, €2,040 for a joint account).
+- Not yet seen: an ATM withdrawal line, a refund line, and a holiday-pay or year-end-bonus line. Expected from public exports.
 
 ## 2. Belfius Mastercard statement (uitgavenstaat, PDF)
 
@@ -31,7 +33,15 @@ Verified on real files supplied on 2026-09-23 (kept out of the repository). All 
 - Section `SERVICE EN WAARBORGEN`: deposits (`WAARBORG PLUS BOX COGO`) and service fees. Deposits are not groceries; they come back later as a refund.
 - Footer: `Totale korting met Xtra: € 39.23`, `Te betalen:   € 242.68`, payment lines `hh:mm:ss  <method>  € <amount>` (here a single `Bancontact` line). **Items + discounts = Te betalen** (checked: 44 items, 11 discounts, exact match).
 - Last page: substitution notes (`… werd vervangen door …`) and legal text; ignore.
-- Not yet verified: an in-store (non Collect&Go) kasticket, and the payment block when meal vouchers are used (issuer name, split, card digits). One receipt paid partly with vouchers is still needed before phase 2.
+- **Payment block with meal vouchers** (verified on the second receipt): one payment line per method, `hh:mm:ss  Pluxee / Sodexo   € 124.52` and `hh:mm:ss  Bancontact   € 51.81`, summing to `Te betalen € 176.33`. The issuer is named; no card digits and no person, so a voucher payment cannot be attributed to one partner from the receipt alone. Payment lines can spill onto the next page (the Bancontact line was on page 2 after a repeated `Te betalen`).
+- Discount rows also appear with a plain quantity instead of a percentage (`Korting B007593   1   -2.97`) and with fractional percentages (`33.34%`). Both receipts reconcile (items + discounts = Te betalen).
+- Both receipts are Collect&Go orders. An in-store kasticket may differ slightly; parse by the same column header and totals, and refuse anything that does not reconcile.
+
+## Cross-checks that hold across the supplied files
+
+- The personal statement's `MASTERCARD AFREKENING NUMMER 237` on 03-09-2026 for `- 448,39` equals the Mastercard statement's `Totaal 448,39 EUR-` with `Datum van debet 03/09/2026`.
+- The personal statement's `OVERSCHRIJVING BELFIUS MOBILE NAAR <shared IBAN> … September` for `- 1.250,00` on 26-08 is the shared statement's `STORTING VAN <personal IBAN> … September` for `+ 1.250,00` on the same day: the two legs of one own transfer.
+- The savings statement's `STORTING VAN <other savings IBAN>` shows savings-to-savings moves exist (relevant for the loyalty-premium warning).
 
 ## Matching this sample end to end
 
