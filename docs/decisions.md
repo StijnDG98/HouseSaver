@@ -58,6 +58,14 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 30  | Cloudflare account setup | Deferred until the first deploy                                                                       | No resources are created before Stijn asks; the `deploy-cloudflare` skill holds the runbook. |
 | 31  | Project environment      | Dedicated Claude Code environment `HouseSaver`; repo carries CLAUDE.md, skills, hook, permissions, CI | See `docs/environment.md`.                                                                   |
 
+## 2026-09-24 — sixth round
+
+| # | Topic | Decision | Notes |
+|---|---|---|---|
+| 32 | Process layer | Adopt superpowers (obra/superpowers) as the working method: brainstorm → spec → plan → TDD → review | Must work in web and phone sessions too, so it is loaded through the Claude Code environment, not a terminal-only install. |
+| 33 | Anthropic plugins | Adopt the relevant official ones as well | Candidates inspected: security-guidance, commit-commands, pr-review-toolkit, code-review, frontend-design, context7, typescript-lsp (terminal only). Exact set settled in the environment brainstorm. |
+| 34 | Existing setup | Rebuild the project setup through a superpowers brainstorm | What Claude scaffolded on 2026-09-24 is a proposal on the branch; the brainstorm decides what survives. |
+
 ## Still open
 
-Mock-up remarks from Stijn (when at his PC). Cloudflare account setup: deferred, see #30. Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).
+Mock-up remarks from Stijn (when at his PC). Cloudflare account setup: deferred, see #30. Environment and workflow design: in progress via superpowers brainstorm. Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).
