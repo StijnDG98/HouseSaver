@@ -1,0 +1,145 @@
+<title>HouseSaver Build Order</title>
+<style>
+:root{--bg:#f3f6f4;--surface:#fff;--ink:#17211e;--ink-2:#5d6a66;--line:#d9e1dd;--accent:#1e6b57;--accent-soft:#dcefe7;--warn:#b85c00;--warn-soft:#fff1d6;--blue:#2a78d6;--blue-soft:#e3eefb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#111716;--surface:#1a2220;--ink:#eef2f0;--ink-2:#a8b4b0;--line:#2b3633;--accent:#5cbd9a;--accent-soft:#1f3a32;--warn:#e6913b;--warn-soft:#3a2c14;--blue:#3987e5;--blue-soft:#1c2c40}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#111716;--surface:#1a2220;--ink:#eef2f0;--ink-2:#a8b4b0;--line:#2b3633;--accent:#5cbd9a;--accent-soft:#1f3a32;--warn:#e6913b;--warn-soft:#3a2c14;--blue:#3987e5;--blue-soft:#1c2c40}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,sans-serif}
+main{max-width:1080px;margin:0 auto;padding-block:28px 48px;padding-inline:16px}
+h1{font-size:24px;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--ink-2);margin:0 0 20px;font-size:14px}
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+svg{max-width:100%;height:auto;display:block;color:var(--ink)}
+figcaption{font-size:13px;color:var(--ink-2);margin-top:12px}
+.svg-text{font-family:inherit}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px;border:1px solid var(--line)}
+.notes{display:grid;gap:12px;grid-template-columns:1fr;margin-top:16px}
+@media(min-width:720px){.notes{grid-template-columns:1fr 1fr}}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px}
+.note h2{font-size:15px;margin:0 0 6px}
+.note ul{margin:0;padding-left:18px;color:var(--ink-2)}
+.note li{margin:3px 0}
+.scroll{overflow-x:auto}
+</style>
+<main>
+<h1>Two possible build orders</h1>
+<p class="sub">Phases 0 and 1 are the same either way. The fork is what comes after the €1,500 question is answered.</p>
+
+<figure>
+<div class="scroll">
+<svg viewBox="0 0 1040 560" role="img" aria-label="Two build orders sharing Phase 0 and Phase 1, then diverging: option A builds receipts, then savings, then projection; option B builds savings, then projection, then receipts. The projection depends on savings balances; receipts depend only on Phase 1.">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+    <marker id="arrDep" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--blue)"/></marker>
+  </defs>
+  <style>text{font-family:"Public Sans",system-ui,sans-serif;fill:currentColor}.t{font-size:13px;font-weight:600}.s{font-size:11px;fill:var(--ink-2)}.k{font-size:11px;font-weight:600}.lbl{font-size:11px;fill:var(--ink-2)}</style>
+
+  <!-- shared phases -->
+  <g>
+    <rect x="20" y="220" width="150" height="110" rx="10" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/>
+    <text x="32" y="242" class="t">0 · Scaffold</text>
+    <text x="32" y="262" class="s">repo, Worker, DB, CI</text>
+    <text x="32" y="278" class="s">login for both emails</text>
+    <text x="32" y="306" class="k" fill="var(--ink-2)">you get: a URL that</text>
+    <text x="32" y="320" class="k" fill="var(--ink-2)">opens behind login</text>
+  </g>
+  <line x1="170" y1="275" x2="200" y2="275" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <g>
+    <rect x="202" y="205" width="200" height="140" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+    <text x="214" y="228" class="t">1 · Import + money views</text>
+    <text x="214" y="248" class="s">3 PDF parsers, reconciliation</text>
+    <text x="214" y="263" class="s">accounts, transfers, rules,</text>
+    <text x="214" y="278" class="s">review queue, export + backup</text>
+    <text x="214" y="293" class="s">This month · Where it goes</text>
+    <text x="214" y="320" class="k" fill="var(--accent)">answers: where does</text>
+    <text x="214" y="334" class="k" fill="var(--accent)">the €1,500 go?</text>
+  </g>
+
+  <!-- fork -->
+  <path d="M402 275 L425 275 L425 120 L448 120" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <path d="M402 275 L425 275 L425 430 L448 430" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="418" y="150" class="k" text-anchor="end">A · handoff</text><text x="418" y="164" class="k" text-anchor="end">order</text>
+  <text x="418" y="400" class="k" text-anchor="end">B · recom-</text><text x="418" y="414" class="k" text-anchor="end">mended</text>
+
+  <!-- Option A: receipts -> savings -> projection -->
+  <g>
+    <rect x="450" y="60" width="170" height="120" rx="10" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="1.4"/>
+    <text x="462" y="82" class="t">2 · Receipts</text>
+    <text x="462" y="102" class="s">Colruyt parser, matching,</text>
+    <text x="462" y="117" class="s">voucher split, article map</text>
+    <text x="462" y="132" class="s">Groceries view</text>
+    <text x="462" y="158" class="k" fill="var(--warn)">fiddliest parser</text>
+    <text x="462" y="172" class="k" fill="var(--warn)">nothing else waits on it</text>
+  </g>
+  <line x1="620" y1="120" x2="648" y2="120" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <g>
+    <rect x="650" y="60" width="170" height="120" rx="10" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/>
+    <text x="662" y="82" class="t">3 · Savings</text>
+    <text x="662" y="102" class="s">savings statements (2-col),</text>
+    <text x="662" y="117" class="s">interest as return,</text>
+    <text x="662" y="132" class="s">investment values typed in</text>
+    <text x="662" y="158" class="k" fill="var(--ink-2)">you get: own money</text>
+    <text x="662" y="172" class="k" fill="var(--ink-2)">total + return per account</text>
+  </g>
+  <line x1="820" y1="120" x2="848" y2="120" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <g>
+    <rect x="850" y="60" width="180" height="120" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+    <text x="862" y="82" class="t">4 · Projection</text>
+    <text x="862" y="102" class="s">all parameters adjustable,</text>
+    <text x="862" y="117" class="s">your own scenarios, goal line,</text>
+    <text x="862" y="132" class="s">Statbel refresh</text>
+    <text x="862" y="158" class="k" fill="var(--accent)">answers: what could</text>
+    <text x="862" y="172" class="k" fill="var(--accent)">we bid, and when?</text>
+  </g>
+
+  <!-- Option B: savings -> projection -> receipts -->
+  <g>
+    <rect x="450" y="370" width="170" height="120" rx="10" fill="var(--surface)" stroke="currentColor" stroke-width="1.2"/>
+    <text x="462" y="392" class="t">2 · Savings</text>
+    <text x="462" y="412" class="s">savings statements (2-col),</text>
+    <text x="462" y="427" class="s">interest as return,</text>
+    <text x="462" y="442" class="s">investment values typed in</text>
+    <text x="462" y="468" class="k" fill="var(--ink-2)">you get: own money</text>
+    <text x="462" y="482" class="k" fill="var(--ink-2)">total + return per account</text>
+  </g>
+  <line x1="620" y1="430" x2="648" y2="430" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <g>
+    <rect x="650" y="370" width="170" height="120" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+    <text x="662" y="392" class="t">3 · Projection</text>
+    <text x="662" y="412" class="s">all parameters adjustable,</text>
+    <text x="662" y="427" class="s">your own scenarios, goal line,</text>
+    <text x="662" y="442" class="s">Statbel refresh</text>
+    <text x="662" y="468" class="k" fill="var(--accent)">answers: what could</text>
+    <text x="662" y="482" class="k" fill="var(--accent)">we bid, and when?</text>
+  </g>
+  <line x1="820" y1="430" x2="848" y2="430" stroke="currentColor" stroke-width="1.4" marker-end="url(#arr)"/>
+  <g>
+    <rect x="850" y="370" width="180" height="120" rx="10" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="1.4"/>
+    <text x="862" y="392" class="t">4 · Receipts</text>
+    <text x="862" y="412" class="s">Colruyt parser, matching,</text>
+    <text x="862" y="427" class="s">voucher split, article map</text>
+    <text x="862" y="442" class="s">Groceries view</text>
+    <text x="862" y="468" class="k" fill="var(--warn)">fiddliest parser, last:</text>
+    <text x="862" y="482" class="k" fill="var(--warn)">a delay here costs nothing</text>
+  </g>
+
+  <!-- dependency arrows (blue, dashed) -->
+  <path d="M735 182 L735 200 L940 200 L940 184" fill="none" stroke="var(--blue)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrDep)"/>
+  <text x="745" y="216" class="lbl" fill="var(--blue)">projection needs the own-money start from savings</text>
+  <path d="M535 492 L535 512 L735 512 L735 494" fill="none" stroke="var(--blue)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrDep)"/>
+  <text x="548" y="528" class="lbl" fill="var(--blue)">same dependency, satisfied in order</text>
+
+  <!-- both -> polish -->
+  <text x="20" y="40" class="lbl">Both orders end with 5 · Polish: private tags, recurring-costs panel, phone upload flow, your mock-up remarks.</text>
+  <text x="20" y="56" class="lbl">Both orders use the receipt matcher only for the Groceries view; the €1,500 and bid answers never depend on it.</text>
+</svg>
+</div>
+<figcaption>What differs is only the moment the second question ("what could we bid?") gets an answer: after block 4 in order A, after block 3 in order B. The receipts block is the one with parsing risk and nothing downstream of it.</figcaption>
+<div class="legend"><span><i style="background:var(--accent-soft);border-color:var(--accent)"></i>answers one of the two questions</span><span><i style="background:var(--warn-soft);border-color:var(--warn)"></i>highest parsing risk</span><span><i style="background:var(--blue-soft);border-color:var(--blue)"></i>dashed: data dependency</span></div>
+</figure>
+
+<div class="notes">
+  <div class="note"><h2>Pick A if</h2><ul><li>Item-level grocery detail is what you are personally most curious about right now.</li><li>You want the household Colruyt spend split into food and non-food before you look at the projection.</li></ul></div>
+  <div class="note"><h2>Pick B if</h2><ul><li>You want both questions answered as early as possible.</li><li>You would rather hit the receipt parser's surprises (an in-store ticket that differs from Collect&amp;Go, a new discount format) when nothing else is waiting on them.</li></ul></div>
+</div>
+</main>
