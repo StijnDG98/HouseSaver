@@ -1,0 +1,21 @@
+{
+  "name": "@housesaver/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@housesaver/core": "workspace:*",
+    "@housesaver/db": "workspace:*",
+    "hono": "^4.10.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251001.0",
+    "typescript": "^5.9.0",
+    "wrangler": "^4.40.0"
+  }
+}

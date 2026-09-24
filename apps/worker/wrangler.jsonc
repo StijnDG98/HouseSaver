@@ -1,0 +1,15 @@
+{
+  // Cloudflare Worker with static assets. Resources are created at first deploy (see the
+  // deploy-cloudflare skill). Both D1 and R2 MUST be created with jurisdiction "eu".
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "housesaver",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "../web/dist", "not_found_handling": "single-page-application" },
+  "observability": { "enabled": false },
+  "vars": { "APP_ENV": "production" },
+  // Added at first deploy:
+  // "d1_databases": [{ "binding": "DB", "database_name": "housesaver", "database_id": "<id>", "migrations_dir": "../../packages/db/migrations" }],
+  // "r2_buckets": [{ "binding": "FILES", "bucket_name": "housesaver-files", "jurisdiction": "eu" }]
+}
