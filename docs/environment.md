@@ -1,6 +1,6 @@
 # Claude Code environment for HouseSaver
 
-This is the cloud environment you pick when starting a Claude Code on the web session. Create one dedicated to this project so its settings never mix with other work. All settings are edited from the cloud environment menu in the session's title bar → Edit.
+Created 2026-09-25 from the environment selector at claude.ai/code (the cloud icon above the message box). Verified: `CLAUDE_CODE_PLUGIN_DIRS` set, eight plugins present, superpowers loaded with its SessionStart hook.
 
 ## Name
 
@@ -8,53 +8,76 @@ This is the cloud environment you pick when starting a Claude Code on the web se
 
 ## Network access
 
-Choose the allow-list level and add these hosts. The first block is what the build needs; the second is what lets me fetch Belgian sources directly instead of via mirrors.
-
-Build and tooling:
-
-- `registry.npmjs.org` (usually allowed by default)
-- `api.cloudflare.com`, `dash.cloudflare.com` — wrangler, only needed from the first deploy on
-- `developers.cloudflare.com` — docs
-- `fonts.googleapis.com`, `fonts.gstatic.com` — UI fonts during local checks
-- `github.com`, `raw.githubusercontent.com`
-
-Research and reference data:
-
-- `belfius.be`, `www.belfius.be`
-- `notaris.be`, `www.notaris.be`
-- `statbel.fgov.be`, `bestat.statbel.fgov.be`
-- `vlaanderen.be`, `www.vlaanderen.be`
-- `leenhelder.be`
-- `nbb.be`, `www.nbb.be`
-- `colruyt.be`, `www.colruyt.be`, `mijnxtra.be`, `www.mijnxtra.be`
-
-## Setup script
-
-The repo's own SessionStart hook (`.claude/hooks/session-start.sh`) installs dependencies, so the environment script only needs the toolchain:
+Currently **Full**. To be switched to **Custom** (defaults plus the list below) before the first real statement is uploaded to a running app; recorded as a plan step, not optional.
 
 ```
-corepack enable
-corepack prepare pnpm@10.33.0 --activate
-pip install --quiet pdfplumber
+belfius.be
+www.belfius.be
+notaris.be
+www.notaris.be
+statbel.fgov.be
+bestat.statbel.fgov.be
+vlaanderen.be
+www.vlaanderen.be
+leenhelder.be
+nbb.be
+www.nbb.be
+colruyt.be
+www.colruyt.be
+mijnxtra.be
+www.mijnxtra.be
+developers.cloudflare.com
+api.cloudflare.com
+dash.cloudflare.com
+fonts.googleapis.com
+fonts.gstatic.com
+mcp.context7.com
 ```
-
-`pdfplumber` is only used in the scratchpad to inspect real PDFs; it never becomes a project dependency.
 
 ## Environment variables
 
-None until the first deploy. Then, as secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` (the same two go into GitHub Actions secrets).
+```
+CLAUDE_CODE_PLUGIN_DIRS=/opt/claude-plugins
+```
+
+Later, for deploys: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` (deferred, decision #30).
+
+## Setup script
+
+```bash
+#!/bin/bash
+# Toolchain
+corepack enable || true
+corepack prepare pnpm@10.33.0 --activate || true
+pip install --quiet pdfplumber || true
+
+# Superpowers + selected Anthropic plugins, loaded via CLAUDE_CODE_PLUGIN_DIRS
+mkdir -p /opt/claude-plugins
+git clone -q --depth 1 https://github.com/obra/superpowers.git /opt/claude-plugins/superpowers || true
+git clone -q --depth 1 https://github.com/anthropics/claude-plugins-official.git /tmp/cpo || true
+for p in security-guidance commit-commands pr-review-toolkit code-review frontend-design claude-md-management; do
+  cp -r "/tmp/cpo/plugins/$p" "/opt/claude-plugins/$p" 2>/dev/null || true
+done
+cp -r /tmp/cpo/external_plugins/context7 /opt/claude-plugins/context7 2>/dev/null || true
+ls /opt/claude-plugins
+```
+
+The script runs once and the filesystem is cached for about seven days; plugins update when the cache rebuilds or the script is edited. Resuming a session never re-runs it.
+
+## Plugins loaded
+
+superpowers (process: brainstorm → spec → plan → TDD → review), security-guidance, commit-commands, pr-review-toolkit, code-review, frontend-design, claude-md-management, context7. `typescript-lsp` is terminal-only and not part of the cloud environment.
+
+`/plugin` is a terminal-only command; in a cloud session verify with `echo $CLAUDE_CODE_PLUGIN_DIRS` and `ls /opt/claude-plugins`.
 
 ## Repository
 
-`StijnDG98/HouseSaver`, default branch `main`. Work happens on `claude/...` branches; merging to `main` runs CI and, once configured, the deploy.
+`StijnDG98/HouseSaver`. Work happens on `claude/...` branches. No `main` branch exists yet.
 
 ## What lives where
 
-| Concern                                           | Where                                                      |
-| ------------------------------------------------- | ---------------------------------------------------------- |
-| Rules for how I work on this project              | `CLAUDE.md`                                                |
-| What is decided and what is open                  | `docs/decisions.md`                                        |
-| Recording a decision, making a fixture, deploying | `.claude/skills/{decisions,fixtures,deploy-cloudflare}`    |
-| Session start, permissions, denied commands       | `.claude/settings.json` + `.claude/hooks/session-start.sh` |
-| Checks that must pass                             | `pnpm check` locally, `.github/workflows/ci.yml` on push   |
-| Real data                                         | never in the repo; scratchpad only, deleted after use      |
+| Concern | Where |
+|---|---|
+| Rules for how Claude works on this project | `CLAUDE.md` (to be rebuilt through the superpowers brainstorm, decision #34) |
+| What is decided and what is open | `docs/decisions.md` |
+| Real data | never in the repo; scratchpad only, deleted after use |
