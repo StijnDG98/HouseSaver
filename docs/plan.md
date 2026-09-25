@@ -108,7 +108,7 @@ House-price reference: table `price_references` (type, region, period, value, so
 - No transaction detail is ever logged. Card numbers are masked at parse time. Real files never enter the repo; fixtures are synthetic.
 - Export: one zip with the SQL dump (D1 export API), JSON per table, and every original PDF; the exporting user's own tags only. The same code runs as a script for backups.
 
-## 6. Phases and exit criteria
+## 6. Phases and exit criteria (proposal; order reopened, decision #35)
 
 **Phase 0 — scaffold (no user input needed).** Monorepo, Worker + static assets, Drizzle migrations, CI, dev identity shim, `.gitignore` for data files. Exit: a hello-world deploy to `workers.dev` behind Access with both emails.
 

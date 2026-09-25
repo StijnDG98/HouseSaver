@@ -66,6 +66,13 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 33 | Anthropic plugins | Adopt the relevant official ones as well | Candidates inspected: security-guidance, commit-commands, pr-review-toolkit, code-review, frontend-design, context7, typescript-lsp (terminal only). Exact set settled in the environment brainstorm. |
 | 34 | Existing setup | Rebuild the project setup through a superpowers brainstorm | What Claude scaffolded on 2026-09-24 is a proposal on the branch; the brainstorm decides what survives. |
 
+## 2026-09-25 — seventh round (environment brainstorm)
+
+| # | Topic | Decision | Notes |
+|---|---|---|---|
+| 35 | Build order | Reopened; supersedes #28 | "Not smart deciding on the build order before we've locked in the full scope of the initial project." Order is decided after the initial scope is. Consequence: the phase list in `docs/plan.md` §6 and the build-order line in `CLAUDE.md` are proposals, not decisions. |
+| 36 | What counts as decided | Only the features, hosting (#1, #16) and the language rule (#8) are Stijn's decisions; everything else in the plan and the 2026-09-24 scaffold is a builder default awaiting the brainstorm | Stijn: "I don't think I really signed off on anything other than what features I want the app to have." Hosting and language explicitly reconfirmed on 2026-09-25. |
+
 ## Still open
 
-Mock-up remarks from Stijn (when at his PC). Cloudflare account setup: deferred, see #30. Environment and workflow design: in progress via superpowers brainstorm. Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).
+Mock-up remarks from Stijn (when at his PC). Cloudflare account setup: deferred, see #30. Environment and workflow design: in progress via superpowers brainstorm. Full scope of the initial project, then the build order (#35). Whether the tech stack (TypeScript, Hono, Drizzle, React/Vite, pnpm monorepo, Vitest, ESLint) is examined in this brainstorm or accepted as builder choice: asked, unanswered. Colruyt payment method is answered by the receipts (Bancontact card, sometimes with Pluxee vouchers).

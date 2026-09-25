@@ -62,4 +62,4 @@ docs/           decisions, plan, sources, mock-up, review
 - Commit messages: imperative subject, body explains why. Commit after every completed step; push to the working branch.
 - Definition of done for any task: `pnpm check` passes, docs updated if behaviour or decisions changed, `docs/decisions.md` touched if a decision was made.
 - Dutch UI strings live in the UI layer only; code identifiers, comments and docs are English.
-- Build order (decided): Phase 0 scaffold → Phase 1 import + money views → Phase 2 savings + projection → Phase 3 receipts → Phase 4 polish.
+- Build order (proposal, reopened by decision #35): Phase 0 scaffold → Phase 1 import + money views → Phase 2 savings + projection → Phase 3 receipts → Phase 4 polish.
