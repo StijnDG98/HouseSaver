@@ -15,3 +15,8 @@ Stijn's remarks on the mock-up, logged verbatim in the order they came. Nothing 
 | 7   | "i want a lot less options here on the side and i want the scenario's to hold the rest of the options. Then you should be able to save scenario's and click between them. Also i want progress on this graph" — screenshot of the whole projection screen. | Projectie: parameter panel, scenarios, chart |
 | 8   | "i don't think we need the analyse page." | Analyse screen |
 | 9   | "can you try an entirely different visual for this webapp?" | Whole mock-up, visual design |
+
+## Round 2 — mock-up of 2026-09-28
+
+| #   | Remark | Screen / element |
+| --- | ------ | ---------------- |

@@ -2,371 +2,318 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<title>HouseSaver – mock-up</title>
+<title>HouseSaver – mock-up 2</title>
 <meta name="viewport" content="width=1200">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #f7f7f5;
-    --ink: #1c2229;
-    --muted: #6a7380;
-    --rule: #d9dcdf;
-    --plus: #1f6e4a;
-    --minus: #a3462b;
-    --action: #2b4c7e;
-    --action-ink: #ffffff;
-    --soft: #eceef0;
-    --prop: #8a6d1f;
+    --shell: #0f141b;
+    --panel: #171e28;
+    --panel-2: #1f2834;
+    --line: #2a3441;
+    --ink: #f2f4f7;
+    --ink-2: #aab4c2;
+    --ink-3: #6f7b8a;
+    --pos: #1f8a55;
+    --neg: #b8433a;
+    --accent: #3987e5;
+    --gold: #c98500;
+    --red: #e66767;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #9085e9;
+    --prop: #d9a83a;
+    --r: 14px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--paper); color: var(--ink);
-    font: 15px/1.45 "Avenir Next", "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-variant-numeric: tabular-nums; }
+  html, body { margin: 0; background: var(--shell); color: var(--ink);
+    font: 15px/1.45 Manrope, "Segoe UI Variable", system-ui, sans-serif; font-variant-numeric: tabular-nums; }
   button, input, select { font: inherit; color: inherit; }
   button { cursor: pointer; }
-  a { color: var(--action); }
-  h1, h2, h3 { font-weight: 600; margin: 0; }
-  h2 { font-size: 20px; }
-  h3 { font-size: 16px; }
-  small { color: var(--muted); font-size: 13px; }
-  .plus { color: var(--plus); }
-  .minus { color: var(--minus); }
+  h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }
+  h2 { font-size: 22px; } h3 { font-size: 15px; color: var(--ink-2); font-weight: 600; }
+  small { color: var(--ink-3); font-size: 13px; }
+  .pos { color: #5ad68f; } .neg { color: #ff8a80; }
 
-  /* proposals: anything Stijn did not ask for */
   .prop { outline: 1.5px dashed var(--prop); outline-offset: 4px; position: relative; }
-  .prop::after { content: "voorstel"; position: absolute; top: -11px; right: 6px; background: var(--paper);
-    color: var(--prop); font-size: 11px; padding: 0 5px; letter-spacing: .02em; }
+  .prop::after { content: "voorstel"; position: absolute; top: -11px; right: 8px; background: var(--shell); color: var(--prop); font-size: 11px; padding: 0 5px; }
 
-  /* header */
-  .top { display: flex; align-items: center; gap: 28px; padding: 18px 40px; border-bottom: 1px solid var(--rule); background: #fff; }
-  .brand { font-weight: 700; font-size: 17px; margin-right: 8px; }
-  .top nav { display: flex; gap: 4px; }
-  .top nav button { background: none; border: 0; padding: 8px 12px; border-radius: 6px; color: var(--muted); }
-  .top nav button.on { color: var(--ink); background: var(--soft); }
-  .tools { margin-left: auto; display: flex; gap: 12px; align-items: center; }
-  .btn { border: 1px solid var(--rule); background: #fff; padding: 8px 14px; border-radius: 6px; }
-  .btn.primary { background: var(--action); color: var(--action-ink); border-color: var(--action); }
+  /* shell */
+  .app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 100vh; }
+  .side { padding: 26px 18px; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; position: sticky; top: 0; height: 100vh; }
+  .logo { font-weight: 800; font-size: 19px; padding: 6px 12px 22px; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+  .side button.nav { text-align: left; background: none; border: 0; padding: 11px 12px; border-radius: 10px; color: var(--ink-2); font-weight: 600; display: flex; align-items: center; gap: 12px; }
+  .side button.nav svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .side button.nav.on { background: var(--panel-2); color: var(--ink); }
+  .side .spacer { flex: 1; }
+  main { padding: 30px 40px 80px; max-width: 1240px; min-width: 0; }
+  .screen { display: none; } .screen.on { display: block; }
+  .head { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .head h2 { margin-right: auto; }
+
+  /* controls */
+  .seg { display: inline-flex; background: var(--panel); border-radius: 10px; padding: 3px; }
+  .seg button { border: 0; background: none; padding: 7px 14px; border-radius: 8px; color: var(--ink-2); font-weight: 600; }
+  .seg button.on { background: var(--panel-2); color: var(--ink); box-shadow: 0 1px 0 rgba(0,0,0,.4); }
+  .seg.who button.on { background: var(--ink); color: var(--shell); }
+  .pnav { display: inline-flex; align-items: center; gap: 4px; }
+  .pnav button { border: 0; background: var(--panel); border-radius: 8px; width: 32px; height: 32px; color: var(--ink-2); }
+  .pnav span { min-width: 180px; text-align: center; font-weight: 700; }
+  .btn { border: 1px solid var(--line); background: var(--panel); padding: 8px 14px; border-radius: 10px; font-weight: 600; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn.small { padding: 5px 10px; font-size: 13px; }
+  .btn.ghost { background: none; }
 
-  main { max-width: 1120px; margin: 0 auto; padding: 28px 40px 80px; }
-  .screen { display: none; }
-  .screen.on { display: block; }
-
-  /* segmented controls */
-  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: #fff; }
-  .seg button { border: 0; background: none; padding: 7px 14px; color: var(--muted); }
-  .seg button + button { border-left: 1px solid var(--rule); }
-  .seg button.on { background: var(--ink); color: #fff; }
-  .seg.big button { padding: 9px 22px; font-size: 16px; }
-
-  /* period row */
-  .controls { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
-  .period-nav { display: flex; align-items: center; gap: 6px; }
-  .period-nav button { border: 1px solid var(--rule); background: #fff; border-radius: 6px; width: 32px; height: 32px; }
-  .period-nav span { min-width: 190px; text-align: center; font-weight: 600; }
-  .controls .who { margin-left: auto; }
-
-  /* hero */
-  .hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
-  .big { font-size: 72px; line-height: 1; font-weight: 600; letter-spacing: -0.02em; }
-  .big.negative { color: var(--minus); }
-  .big-label { display: block; margin-top: 10px; font-size: 17px; color: var(--muted); }
-  .compare { margin-top: 14px; display: grid; grid-template-columns: auto auto; gap: 4px 20px; width: max-content; color: var(--muted); font-size: 14px; }
-  .compare b { color: var(--ink); font-weight: 500; }
-  .lines { list-style: none; margin: 4px 0 0; padding: 0; }
-  .lines li { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--rule); }
-  .lines li.total { border-bottom: 0; border-top: 2px solid var(--ink); font-weight: 600; }
-  .lines li.dim { color: var(--muted); }
-  .toggle { display: flex; gap: 10px; align-items: baseline; margin-top: 14px; }
-  .toggle input { transform: translateY(2px); }
-
-  /* categories */
-  details.cats { margin: 26px 0 0; padding-bottom: 24px; border-bottom: 1px solid var(--rule); }
-  details.cats summary { cursor: pointer; font-weight: 600; font-size: 18px; list-style: none; display: flex; align-items: center; gap: 10px; }
-  details.cats summary::before { content: "▸"; color: var(--muted); font-size: 14px; transition: transform .15s; }
+  /* flow field */
+  .flow { --c: var(--pos); --k: 60%; border-radius: 22px; padding: 30px 34px 26px;
+    background: color-mix(in oklab, var(--c) var(--k), var(--panel)); color: #fff; }
+  .flow.neg { --c: var(--neg); }
+  .flow small, .flow .lines li.dim { color: rgba(255,255,255,.72); }
+  .flow-top { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+  .big { font-size: 78px; line-height: 1; font-weight: 800; letter-spacing: -0.035em; }
+  .big-label { display: block; margin-top: 10px; font-size: 17px; font-weight: 500; opacity: .9; }
+  .compare { margin-top: 16px; display: grid; grid-template-columns: auto auto; gap: 4px 18px; width: max-content; font-size: 14px; opacity: .9; }
+  .compare b { font-weight: 700; }
+  .lines { list-style: none; margin: 0; padding: 0; }
+  .lines li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.18); }
+  .lines li.total { border-bottom: 0; border-top: 2px solid rgba(255,255,255,.7); font-weight: 800; }
+  .lines li.dim { font-size: 14px; }
+  .toggle { display: flex; gap: 10px; align-items: baseline; margin-top: 12px; font-size: 14px; }
+  .toggle input { transform: translateY(2px); accent-color: #fff; }
+  details.cats { margin-top: 22px; border-top: 1px solid rgba(255,255,255,.25); padding-top: 14px; }
+  details.cats summary { list-style: none; cursor: pointer; font-weight: 800; font-size: 16px; display: flex; gap: 10px; align-items: center; }
+  details.cats summary::before { content: "▸"; font-size: 13px; opacity: .8; transition: transform .15s; }
   details.cats[open] summary::before { transform: rotate(90deg); }
-  .cat-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 48px; }
-  .cat-list li { display: grid; grid-template-columns: 150px 1fr 90px; align-items: center; gap: 12px; padding: 4px 0; }
-  .cat-list .bar { height: 10px; background: var(--soft); border-radius: 2px; overflow: hidden; }
-  .cat-list .bar i { display: block; height: 100%; background: var(--minus); opacity: .85; }
+  .cat-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 44px; }
+  .cat-list li { display: grid; grid-template-columns: 160px 1fr 90px; gap: 12px; align-items: center; }
+  .cat-list .bar { height: 9px; background: rgba(0,0,0,.28); border-radius: 4px; overflow: hidden; }
+  .cat-list .bar i { display: block; height: 100%; background: #fff; border-radius: 4px; opacity: .92; }
   .cat-list .amt { text-align: right; }
-  .cat-list .name { cursor: pointer; }
-  .cat-list .name:hover { text-decoration: underline; }
 
-  /* transactions */
-  .txs { margin-top: 26px; }
-  .txs-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px; }
-  .filters { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
-  .filters input[type=search] { flex: 1; min-width: 260px; border: 1px solid var(--rule); background: #fff; padding: 7px 10px; border-radius: 6px; }
-  .filters select { border: 1px solid var(--rule); background: #fff; padding: 7px 10px; border-radius: 6px; }
-  .filters label { display: flex; gap: 6px; align-items: center; padding: 4px 8px; }
+  /* list */
+  .list { margin-top: 26px; }
+  .list-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px; }
+  .list-head h3 { font-size: 18px; color: var(--ink); font-weight: 800; margin-right: auto; }
+  .search { border: 1px solid var(--line); background: var(--panel); padding: 7px 12px; border-radius: 10px; width: 300px; color: var(--ink); }
   table.tx { width: 100%; border-collapse: collapse; }
-  table.tx th { text-align: left; font-weight: 500; color: var(--muted); font-size: 13px; padding: 8px 6px; border-bottom: 1px solid var(--ink); }
-  table.tx td { padding: 9px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
-  table.tx td.amt, table.tx th.amt { text-align: right; white-space: nowrap; }
-  table.tx td.date { white-space: nowrap; color: var(--muted); width: 90px; }
-  table.tx td.acc { color: var(--muted); font-size: 13px; width: 190px; }
-  table.tx tr.transfer td { color: var(--muted); }
-  .chip { border: 1px solid var(--rule); background: #fff; border-radius: 12px; padding: 1px 9px; font-size: 13px; appearance: none; -webkit-appearance: none; }
-  .chip.none { border-style: dashed; color: var(--prop); }
-  .expand { border: 0; background: none; color: var(--action); padding: 0; font-size: 13px; }
-  .receipt { margin: 8px 0 2px; border-left: 2px solid var(--rule); padding-left: 12px; font-size: 13px; }
-  .receipt table { border-collapse: collapse; }
-  .receipt td { padding: 2px 10px 2px 0; border: 0; }
-  .receipt .pay { margin-top: 6px; color: var(--muted); }
-  .empty { padding: 30px 0; color: var(--muted); }
+  table.tx th { text-align: left; font-weight: 600; color: var(--ink-3); font-size: 13px; padding: 8px 8px; border-bottom: 1px solid var(--line); }
+  table.tx td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.tx td.date { color: var(--ink-3); width: 84px; white-space: nowrap; }
+  table.tx td.amt, table.tx th.amt { text-align: right; white-space: nowrap; font-weight: 600; }
+  table.tx td.cat { color: var(--ink-2); width: 190px; }
+  table.tx tr.transfer td { color: var(--ink-3); }
+  .expand { border: 0; background: none; color: var(--accent); padding: 0; font-size: 13px; margin-left: 8px; }
+  .receipt { margin: 8px 0 2px; border-left: 2px solid var(--line); padding-left: 12px; font-size: 13px; color: var(--ink-2); }
+  .receipt table { border-collapse: collapse; } .receipt td { padding: 2px 12px 2px 0; border: 0; }
+  .receipt .pay { margin-top: 6px; color: var(--ink-3); }
+  .empty { padding: 26px 0; color: var(--ink-3); }
 
-  /* side panels */
-  .panel { position: fixed; top: 0; right: 0; height: 100%; width: 460px; background: #fff; border-left: 1px solid var(--rule);
-    padding: 26px 30px; transform: translateX(100%); transition: transform .18s; overflow: auto; z-index: 5; box-shadow: none; }
-  .panel.open { transform: none; box-shadow: -12px 0 30px rgba(28,34,41,.08); }
-  .panel .close { position: absolute; top: 18px; right: 18px; border: 0; background: none; font-size: 20px; color: var(--muted); }
-  .panel h2 { margin-bottom: 16px; }
-  .drop { border: 1.5px dashed var(--rule); border-radius: 8px; padding: 34px 20px; text-align: center; color: var(--muted); margin: 14px 0 22px; }
-  .drop b { display: block; color: var(--ink); margin-bottom: 6px; }
-  .kinds { margin: 0 0 22px; padding-left: 18px; color: var(--muted); font-size: 14px; }
-  .imports { list-style: none; margin: 0; padding: 0; }
-  .imports li { padding: 10px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
-  .imports .ok { color: var(--plus); }
-  .imports .bad { color: var(--minus); }
+  /* documenten */
+  .docs { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .panel { background: var(--panel); border-radius: var(--r); padding: 20px 22px; }
+  .panel h3 { color: var(--ink); font-weight: 800; font-size: 16px; margin-bottom: 12px; }
+  .drop { border: 1.5px dashed var(--line); border-radius: 12px; padding: 30px 18px; text-align: center; color: var(--ink-3); margin-bottom: 14px; }
+  .drop b { display: block; color: var(--ink); margin-bottom: 4px; }
+  .kinds { margin: 0 0 6px; padding-left: 18px; color: var(--ink-3); font-size: 13px; }
+  .imports { list-style: none; margin: 12px 0 0; padding: 0; }
+  .imports li { padding: 10px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: 14px; }
   .imports small { grid-column: 1 / -1; }
-  .settings h3 { margin: 22px 0 8px; }
-  .accs { list-style: none; margin: 0; padding: 0; }
-  .accs li { display: grid; grid-template-columns: 1fr auto; padding: 7px 0; border-bottom: 1px solid var(--rule); }
-  .accs small { display: block; }
-  .switch { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+  .review-head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .review-head h3 { margin: 0 auto 0 0; }
+  table.rev { width: 100%; border-collapse: collapse; }
+  table.rev td { padding: 9px 6px; border-top: 1px solid var(--line); vertical-align: middle; }
+  table.rev td.date { color: var(--ink-3); width: 80px; white-space: nowrap; }
+  table.rev td.acc { color: var(--ink-3); font-size: 12px; width: 120px; }
+  table.rev td.desc { min-width: 160px; }
+  .panel.review { min-width: 0; overflow-x: auto; }
+  table.rev td.amt { text-align: right; white-space: nowrap; font-weight: 600; width: 100px; }
+  select.cat { background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); border-radius: 8px; padding: 4px 6px; max-width: 150px; }
+  select.cat.none { border-color: var(--prop); color: var(--prop); }
+  label.remember { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-3); white-space: nowrap; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
 
-  /* projection */
-  .proj-grid { display: grid; grid-template-columns: 1fr 320px; gap: 36px; align-items: start; }
-  .chart-wrap svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--rule); border-radius: 6px; }
-  .legend { display: flex; gap: 18px; margin-top: 10px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-  .legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; }
+  /* projectie */
+  .scen-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .chip { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 14px 7px 10px; color: var(--ink-2); font-weight: 600; display: inline-flex; gap: 8px; align-items: center; }
+  .chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .chip.on { background: var(--panel-2); color: var(--ink); border-color: var(--ink-3); }
+  .proj { display: grid; grid-template-columns: 1fr 300px; gap: 28px; align-items: start; }
+  .chart { background: var(--panel); border-radius: var(--r); padding: 14px 14px 6px; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--ink-3); padding: 8px 6px 4px; }
+  .legend i { display: inline-block; width: 16px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  .progress { margin-top: 18px; }
+  .progress .track { height: 12px; background: var(--panel); border-radius: 6px; overflow: hidden; position: relative; }
+  .progress .track i { display: block; height: 100%; background: var(--pos); border-radius: 6px; }
+  .progress .track b { position: absolute; top: -4px; width: 2px; height: 20px; background: var(--gold); }
+  .progress .row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 14px; color: var(--ink-2); }
+  .progress .row strong { color: var(--ink); }
+  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .results div { background: var(--panel); border-radius: var(--r); padding: 16px 18px; }
+  .results b { display: block; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0 2px; }
+  .advice { margin: 20px 0 0; font-size: 17px; line-height: 1.5; max-width: 720px; }
+  .advice b { color: #5ad68f; } .advice b.short { color: #ff8a80; }
   .params { display: grid; gap: 10px; }
-  .params h3 { margin-bottom: 4px; }
-  .params label { display: grid; grid-template-columns: 1fr 110px; align-items: center; gap: 10px; font-size: 14px; }
-  .params input, .params select { border: 1px solid var(--rule); background: #fff; padding: 5px 8px; border-radius: 6px; text-align: right; }
+  .params label { display: grid; grid-template-columns: 1fr 108px; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+  .params input, .params select { background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); padding: 6px 9px; border-radius: 8px; text-align: right; width: 100%; }
   .params select { text-align: left; }
-  .params small { grid-column: 1 / -1; margin-top: -6px; }
-  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin: 30px 0 0; padding: 22px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-  .results b { display: block; font-size: 30px; font-weight: 600; letter-spacing: -0.01em; margin: 2px 0; }
-  .advice { margin: 22px 0 0; font-size: 18px; line-height: 1.5; max-width: 760px; }
-  .advice b { color: var(--plus); }
-  .advice b.short { color: var(--minus); }
-  .scen { margin-top: 28px; }
-  .scen ul { list-style: none; padding: 0; margin: 10px 0 12px; }
-  .scen li { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
-  .scen li i { width: 14px; height: 3px; display: inline-block; }
-  .scen li small { text-align: right; }
+  .params .fact { display: grid; grid-template-columns: 1fr auto; font-size: 14px; color: var(--ink-2); padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .params .fact b { color: var(--ink); }
+  .params small { margin-top: -6px; }
+  .scen-edit { margin-top: 22px; background: var(--panel); border-radius: var(--r); padding: 18px 22px; }
+  .scen-edit .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 28px; margin-top: 12px; }
+  .scen-edit label { display: grid; grid-template-columns: 1fr 100px; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+  .scen-edit input { background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); padding: 5px 9px; border-radius: 8px; text-align: right; width: 100%; }
+  .scen-edit .name { width: 260px; text-align: left; font-weight: 700; font-size: 16px; }
+  .scen-edit .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--shell); padding: 10px 16px; border-radius: 10px; font-weight: 600; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
 
-  /* analysis */
-  .ana-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 48px; margin-top: 12px; }
-  .ana-block h3 { margin-bottom: 10px; }
-  .ana-block table { width: 100%; border-collapse: collapse; }
-  .ana-block td { padding: 6px 0; border-bottom: 1px solid var(--rule); }
-  .ana-block td.amt { text-align: right; white-space: nowrap; }
-  .ana-block td.m { color: var(--muted); font-size: 13px; }
-  .bars { display: flex; align-items: flex-end; gap: 6px; height: 140px; border-bottom: 1px solid var(--ink); padding-bottom: 0; }
-  .bars div { flex: 1; background: var(--plus); opacity: .8; position: relative; }
-  .bars div.neg { background: var(--minus); }
-  .bars div span { position: absolute; top: -18px; left: 0; right: 0; text-align: center; font-size: 11px; color: var(--muted); }
-  .bars-x { display: flex; gap: 6px; font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .bars-x span { flex: 1; text-align: center; }
-  .note { color: var(--muted); font-size: 14px; max-width: 760px; margin: 6px 0 22px; }
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-  .split div { border-top: 3px solid var(--ink); padding-top: 6px; }
-  .split div:last-child { border-top-color: var(--muted); }
-  .split b { display: block; font-size: 22px; }
+  /* settings panel */
+  .drawer { position: fixed; top: 0; right: 0; height: 100%; width: 440px; background: var(--panel); border-left: 1px solid var(--line); padding: 26px 30px; transform: translateX(100%); transition: transform .18s; overflow: auto; z-index: 5; }
+  .drawer.open { transform: none; }
+  .drawer .close { position: absolute; top: 16px; right: 16px; border: 0; background: none; font-size: 22px; color: var(--ink-3); }
+  .drawer h3 { color: var(--ink); font-weight: 800; margin: 22px 0 8px; font-size: 15px; }
+  .accs { list-style: none; margin: 0; padding: 0; }
+  .accs li { display: grid; grid-template-columns: 1fr auto; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .accs small { display: block; }
+  .switch { display: flex; gap: 10px; align-items: center; margin: 6px 0; font-size: 14px; }
 </style>
 </head>
 <body>
+<div class="app">
+  <aside class="side">
+    <div class="logo">House<span>Saver</span></div>
+    <button class="nav on" data-screen="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Overzicht</button>
+    <button class="nav" data-screen="docs"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Documenten</button>
+    <button class="nav" data-screen="proj"><svg viewBox="0 0 24 24"><path d="M3 20h18M4 16l5-6 4 3 7-8"/></svg>Projectie</button>
+    <div class="spacer"></div>
+    <button class="nav prop" id="btn-settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Instellingen</button>
+  </aside>
 
-<header class="top">
-  <div class="brand">HouseSaver</div>
-  <nav id="nav">
-    <button data-screen="home" class="on">Overzicht</button>
-    <button data-screen="proj">Projectie</button>
-    <button data-screen="ana">Analyse</button>
-  </nav>
-  <div class="tools">
-    <button class="btn primary" id="btn-upload">PDF toevoegen</button>
-    <button class="btn prop" id="btn-settings">Instellingen</button>
-  </div>
-</header>
-
-<main>
-
-<!-- ============ OVERZICHT ============ -->
-<section id="home" class="screen on">
-  <div class="controls">
-    <div class="seg" id="seg-period">
-      <button data-p="m" class="on">Maand</button>
-      <button data-p="q">3 maanden</button>
-      <button data-p="y">Jaar</button>
-    </div>
-    <div class="period-nav">
-      <button id="prev" title="vorige">‹</button>
-      <span id="period-label"></span>
-      <button id="next" title="volgende">›</button>
-    </div>
-    <div class="seg big who" id="seg-who">
-      <button data-w="stijn" class="on">Jij</button>
-      <button data-w="partner">Partner</button>
-      <button data-w="samen">Samen</button>
-    </div>
-  </div>
-
-  <div class="hero">
-    <div>
-      <div class="big" id="big"></div>
-      <span class="big-label" id="big-label"></span>
-      <div class="compare" id="compare"></div>
-    </div>
-    <div>
-      <ul class="lines" id="lines"></ul>
-      <label class="toggle"><input type="checkbox" id="tog-inv"> <span>Beleggingen meetellen <br><small>wat deze schakelaar precies meetelt is nog open: de waardeverandering, of wat er naar beleggingen ging</small></span></label>
-    </div>
-  </div>
-
-  <details class="cats" open>
-    <summary>Waar ging het heen</summary>
-    <ol class="cat-list" id="cats"></ol>
-  </details>
-
-  <div class="txs">
-    <div class="txs-head"><h2>Verrichtingen</h2><small id="tx-count"></small></div>
-    <div class="filters">
-      <input type="search" id="q" placeholder="Zoek op omschrijving of tegenpartij">
-      <select id="f-cat"><option value="">Alle categorieën</option></select>
-      <select id="f-acc"><option value="">Alle rekeningen</option></select>
-      <label class="prop"><input type="checkbox" id="f-unknown"> alleen zonder categorie</label>
-    </div>
-    <table class="tx">
-      <thead><tr><th>Datum</th><th>Omschrijving</th><th>Rekening</th><th>Categorie</th><th class="amt">Bedrag</th></tr></thead>
-      <tbody id="tx-body"></tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ============ PROJECTIE ============ -->
-<section id="proj" class="screen">
-  <div class="proj-grid">
-    <div class="chart-wrap">
-      <svg id="chart" viewBox="0 0 760 380" role="img" aria-label="Eigen middelen in de tijd"></svg>
-      <div class="legend">
-        <span><i style="background:var(--ink)"></i>verwacht ritme</span>
-        <span><i style="background:#c9ced4;height:10px"></i>laag tot hoog (P25–P75 van de laatste 6 maanden)</span>
-        <span><i style="background:var(--minus)"></i>eigen inbreng nodig (stijgt met de woningprijs)</span>
-        <span><i style="background:var(--action)"></i>doellijn (gedeeld, zelf gekozen)</span>
+  <main>
+    <!-- ============ OVERZICHT ============ -->
+    <section id="home" class="screen on">
+      <div class="head">
+        <div class="seg" id="seg-period"><button data-p="m" class="on">Maand</button><button data-p="q">3 maanden</button><button data-p="y">Jaar</button></div>
+        <div class="pnav"><button id="prev">‹</button><span id="period-label"></span><button id="next">›</button></div>
+        <div style="margin-left:auto" class="seg who" id="seg-who"><button data-w="stijn" class="on">Jij</button><button data-w="partner">Partner</button><button data-w="samen">Samen</button></div>
       </div>
-      <div class="results" id="results"></div>
-      <p class="advice" id="advice"></p>
-      <div class="scen">
-        <h3>Scenario's</h3>
-        <ul id="scen"></ul>
-        <button class="btn small" id="add-scen">Scenario toevoegen</button>
+
+      <div class="flow" id="flow">
+        <div class="flow-top">
+          <div>
+            <div class="big" id="big"></div>
+            <span class="big-label" id="big-label"></span>
+            <div class="compare" id="compare"></div>
+          </div>
+          <div>
+            <ul class="lines" id="lines"></ul>
+            <label class="toggle"><input type="checkbox" id="tog-inv"> <span>Beleggingen meetellen<br><small>wat deze schakelaar precies meetelt is nog open: de waardeverandering, of wat er naar beleggingen ging</small></span></label>
+          </div>
+        </div>
+        <details class="cats" open>
+          <summary>Waar ging het heen</summary>
+          <ol class="cat-list" id="cats"></ol>
+        </details>
       </div>
-    </div>
-    <form class="params" id="params" onsubmit="return false">
-      <h3>Rekenregels</h3>
-      <small>Alles hier is aanpasbaar op dit scherm. Elke waarde met een bron krijgt die bron erbij.</small>
-      <label>Netto inkomen jij / maand <input type="number" name="incS" value="2650"></label>
-      <label>Netto inkomen partner / maand <input type="number" name="incP" value="2300"></label>
-      <label>Spaarritme / maand <input type="number" name="save" value="0"></label>
-      <small>Voorgevuld met de mediaan van de laatste 6 maanden.</small>
-      <label>Eigen middelen vandaag <input type="number" name="own" value="22000"></label>
-      <label>Rente op spaargeld %/jaar <input type="number" step="0.1" name="rate" value="2.0"></label>
-      <label>Woningtype <select name="type"><option value="halfopen">Halfopen (2–3 gevels)</option><option value="open">Open (4+ gevels)</option></select></label>
-      <label>Provincie <select name="prov"><option>Oost-Vlaanderen</option><option>West-Vlaanderen</option><option>Antwerpen</option><option>Vlaams-Brabant</option><option>Limburg</option></select></label>
-      <label>Mediaanprijs vandaag <input type="number" name="price" value="310000"></label>
-      <small>Statbel 2025, Oost-Vlaanderen, halfopen. Knop “Vernieuwen” komt hier.</small>
-      <label>Prijsgroei %/jaar <input type="number" step="0.1" name="growth" value="4.0"></label>
-      <label>Hypotheekrente %/jaar <input type="number" step="0.1" name="mrate" value="3.8"></label>
-      <label>Looptijd jaren <input type="number" name="years" value="25"></label>
-      <label>Max. lening % van de prijs (LTV) <input type="number" name="ltv" value="90"></label>
-      <label>Max. aflossing % van het inkomen <input type="number" name="dti" value="38"></label>
-      <label>Horizon jaren <input type="number" name="horizon" value="5"></label>
-      <label>Doellijn eigen inbreng <input type="number" name="goal" value="60000"></label>
-    </form>
-  </div>
-</section>
 
-<!-- ============ ANALYSE ============ -->
-<section id="ana" class="screen">
-  <h2 class="prop" style="display:inline-block">Analyse</h2>
-  <p class="note">Je was niet zeker van dit scherm. Dit zijn vier blokken die met de bestaande gegevens kunnen, als voorstel. Schrap wat je niet wilt, of het hele scherm.</p>
-  <div class="ana-grid">
-    <div class="ana-block prop">
-      <h3>Gespaard per maand, laatste 12 maanden (samen)</h3>
-      <div class="bars" id="ana-bars"></div>
-      <div class="bars-x" id="ana-bars-x"></div>
-    </div>
-    <div class="ana-block prop">
-      <h3>Vaste kosten en abonnementen</h3>
-      <small>Zelfde tegenpartij, zelfde bedrag, minstens drie maanden op rij.</small>
-      <table id="ana-fixed"></table>
-    </div>
-    <div class="ana-block prop">
-      <h3>Grootste tegenpartijen, laatste 3 maanden</h3>
-      <table id="ana-counter"></table>
-    </div>
-    <div class="ana-block prop">
-      <h3>Colruyt, laatste 3 maanden</h3>
-      <div class="split"><div><small>Met maaltijdcheques</small><b id="ana-bon"></b></div><div><small>Met de kaart</small><b id="ana-kaart"></b></div></div>
-      <table id="ana-groups" style="margin-top:12px"></table>
-    </div>
-  </div>
-</section>
+      <div class="list">
+        <div class="list-head"><h3>Verrichtingen</h3><small id="tx-count"></small><input type="search" class="search prop" id="q" placeholder="Zoeken"></div>
+        <table class="tx">
+          <thead><tr><th>Datum</th><th>Omschrijving</th><th>Categorie</th><th class="amt">Bedrag</th></tr></thead>
+          <tbody id="tx-body"></tbody>
+        </table>
+      </div>
+    </section>
 
-</main>
+    <!-- ============ DOCUMENTEN ============ -->
+    <section id="docs" class="screen">
+      <div class="head"><h2>Documenten</h2><small>PDF's toevoegen en de categorieën van alles nakijken</small></div>
+      <div class="docs">
+        <div class="panel">
+          <h3>PDF toevoegen</h3>
+          <div class="drop"><b>Sleep bestanden hierheen</b>of kies ze op je computer. Meerdere tegelijk mag; overlap en dubbels worden herkend.</div>
+          <ul class="kinds"><li>Belfius rekeninguittreksel (zicht of spaar)</li><li>Belfius Mastercard uitgavenstaat</li><li>Colruyt kasticket</li></ul>
+          <h3 style="margin-top:18px">Laatste imports</h3>
+          <ul class="imports">
+            <li><span>Uittreksel gezamenlijke zichtrekening, nr. 9</span><span class="pos">42 verrichtingen</span><small>Beginsaldo + verrichtingen = eindsaldo. 3 dubbels overgeslagen.</small></li>
+            <li><span>Kasticket Colruyt 25 sep 2026</span><span class="pos">gekoppeld</span><small>Aan de kaartbetaling van 25 sep.</small></li>
+            <li><span>Uittreksel spaarrekening jij, nr. 3</span><span class="neg">geweigerd</span><small>Beginsaldo + verrichtingen ≠ eindsaldo (verschil € 0,01). Niets geïmporteerd.</small></li>
+            <li><span>Mastercard uitgavenstaat partner, september</span><span class="pos">11 verrichtingen</span><small>Som van de lijnen = totaal.</small></li>
+          </ul>
+        </div>
+        <div class="panel review">
+          <div class="review-head"><h3>Categorieën nakijken</h3><small id="rev-count"></small><label class="switch"><input type="checkbox" id="rev-all"> alles tonen</label></div>
+          <table class="rev"><tbody id="rev-body"></tbody></table>
+        </div>
+      </div>
+    </section>
 
-<!-- ============ PANELS ============ -->
-<aside class="panel" id="panel-upload">
-  <button class="close" aria-label="sluiten">×</button>
-  <h2>PDF toevoegen</h2>
-  <div class="drop"><b>Sleep bestanden hierheen</b>of kies ze op je computer. Meerdere tegelijk mag; overlap en dubbels worden herkend.</div>
-  <ul class="kinds">
-    <li>Belfius rekeninguittreksel (zicht- of spaarrekening)</li>
-    <li>Belfius Mastercard uitgavenstaat</li>
-    <li>Colruyt kasticket</li>
-  </ul>
-  <h3>Laatste imports</h3>
-  <ul class="imports">
-    <li><span>Uittreksel gezamenlijke zichtrekening, nr. 9</span><span class="ok">42 verrichtingen</span><small>Beginsaldo + verrichtingen = eindsaldo. 3 dubbels overgeslagen.</small></li>
-    <li><span>Kasticket Colruyt 18 sep 2026</span><span class="ok">gekoppeld</span><small>Aan de kaartbetaling van 18 sep, € 96,40.</small></li>
-    <li><span>Uittreksel spaarrekening jij, nr. 3</span><span class="bad">geweigerd</span><small>Beginsaldo + verrichtingen ≠ eindsaldo (verschil € 0,01). Niets geïmporteerd.</small></li>
-    <li><span>Mastercard uitgavenstaat partner, september</span><span class="ok">11 verrichtingen</span><small>Som van de lijnen = totaal.</small></li>
-  </ul>
-</aside>
+    <!-- ============ PROJECTIE ============ -->
+    <section id="proj" class="screen">
+      <div class="head"><h2>Projectie</h2><small>Hoe doen we het, en wat zouden we moeten doen</small></div>
+      <div class="scen-bar" id="scen-bar"></div>
+      <div class="proj">
+        <div>
+          <div class="chart">
+            <svg id="chart" viewBox="0 0 800 380" role="img" aria-label="Eigen middelen: gemeten en verwacht"></svg>
+            <div class="legend" id="legend"></div>
+          </div>
+          <div class="progress" id="progress"></div>
+          <div class="results" id="results"></div>
+          <p class="advice" id="advice"></p>
+          <div class="scen-edit" id="scen-edit"></div>
+        </div>
+        <form class="params panel" id="params" onsubmit="return false">
+          <h3>Vaststaand</h3>
+          <div class="fact"><span>Eigen middelen vandaag</span><b id="fact-own"></b></div>
+          <div class="fact"><span>Spaarritme (mediaan 6 mnd)</span><b id="fact-save"></b></div>
+          <div class="fact"><span>P25 – P75</span><b id="fact-band"></b></div>
+          <h3 style="margin-top:14px">Doel</h3>
+          <label>Horizon jaren <input type="number" name="horizon" value="5"></label>
+          <label>Woningtype <select name="type"><option value="halfopen">Halfopen</option><option value="open">Open</option></select></label>
+          <label>Provincie <select name="prov"><option>Oost-Vlaanderen</option><option>West-Vlaanderen</option><option>Antwerpen</option><option>Vlaams-Brabant</option><option>Limburg</option></select></label>
+          <label>Mediaanprijs vandaag <input type="number" name="price" value="310000"></label>
+          <small>Statbel 2025. <a href="#" style="color:var(--accent)">Vernieuwen</a></small>
+          <label>Doellijn eigen inbreng <input type="number" name="goal" value="60000"></label>
+          <small>Gedeeld tussen jullie twee.</small>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
 
-<aside class="panel settings" id="panel-settings">
+<aside class="drawer" id="drawer">
   <button class="close" aria-label="sluiten">×</button>
   <h2>Instellingen</h2>
-  <small>Alles hier is een voorstel: je gaf deze dingen geen plek. Rekeningen, zichtbaarheid en export moeten ergens wonen.</small>
+  <small>Voorstel: rekeningen, zichtbaarheid en export hebben nog geen plek van jou gekregen.</small>
   <h3>Rekeningen</h3>
   <ul class="accs" id="accs"></ul>
   <h3>Zichtbaarheid</h3>
-  <small>Elkaars persoonlijke rekeningen in detail zien. Staat pas aan als jullie het allebei aanzetten; zet één van jullie het uit, dan is het voor beiden uit.</small>
+  <small>Elkaars persoonlijke rekeningen in detail zien. Pas aan als jullie het allebei aanzetten.</small>
   <div class="switch"><input type="checkbox" id="vis-me" checked> <label for="vis-me">Jij: aan</label></div>
   <div class="switch"><input type="checkbox" id="vis-p"> <label for="vis-p">Partner: nog niet</label></div>
   <h3>Gegevens</h3>
   <button class="btn">Alles exporteren</button>
-  <small style="display:block;margin-top:6px">Eén zip: databank, JSON per tabel, elke originele PDF.</small>
 </aside>
+<div class="toast" id="toast"></div>
 
 <script>
 // ---------- helpers ----------
 const eur = new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR' });
+const eur0 = new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 const fmt = c => eur.format(c / 100);
 const fmtSigned = c => (c < 0 ? '− ' : '+ ') + eur.format(Math.abs(c) / 100);
 const MONTHS = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
-const MONTHS_SHORT = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const MS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const rnd = mulberry32(20260925);
+const rnd = mulberry32(20260928);
 const between = (a, b) => Math.round(a + rnd() * (b - a));
 const pick = arr => arr[Math.floor(rnd() * arr.length)];
-const ym = (y, m) => y * 12 + m;                      // month index
-const fromYm = i => ({ y: Math.floor(i / 12), m: i % 12 });
+const ym = (y, m) => y * 12 + m, fromYm = i => ({ y: Math.floor(i / 12), m: i % 12 });
 const dateStr = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-const shortDate = s => { const [y, m, d] = s.split('-').map(Number); return `${d} ${MONTHS_SHORT[m - 1]}`; };
+const shortDate = s => { const [y, m, d] = s.split('-').map(Number); return `${d} ${MS[m - 1]}`; };
+const $ = id => document.getElementById(id);
 
 // ---------- fake data ----------
 const ACCOUNTS = [
@@ -381,45 +328,28 @@ const ACCOUNTS = [
 ];
 const ACC = Object.fromEntries(ACCOUNTS.map(a => [a.id, a]));
 const CATS = ['Huur', 'Boodschappen', 'Energie en water', 'Eten buitenshuis', 'Vervoer', 'Abonnementen', 'Gezondheid', 'Cadeaus', 'Cash', 'Overige'];
-
-const FIRST = ym(2025, 9);   // oktober 2025
-const LAST  = ym(2026, 8);   // september 2026 (vandaag: 25 sep 2026)
-const TX = [];
-let txId = 0;
-// kind: inkomen | uitgave | overdracht (own transfer, never counted) | naar-samen (person → shared, counts as that person's outflow)
+const FIRST = ym(2025, 9), LAST = ym(2026, 8);   // okt 2025 – sep 2026
+const TX = []; let txId = 0;
 function add(t) { TX.push(Object.assign({ id: ++txId, cat: null, kind: 'uitgave' }, t)); }
-
-const GROUPS = ['Groenten en fruit', 'Zuivel', 'Vlees en vis', 'Brood', 'Dranken', 'Huishouden', 'Verzorging', 'Diepvries', 'Kruidenierswaren'];
 const ITEMS = [
   ['Bananen', 'Groenten en fruit', 189], ['Appels Jonagold 2kg', 'Groenten en fruit', 349], ['Tomaten trostomaat', 'Groenten en fruit', 279],
   ['Halfvolle melk 6x1l', 'Zuivel', 599], ['Boter Boni 250g', 'Zuivel', 289], ['Yoghurt natuur 1kg', 'Zuivel', 219],
   ['Kipfilet 1kg', 'Vlees en vis', 999], ['Gehakt gemengd 500g', 'Vlees en vis', 469], ['Zalmfilet 300g', 'Vlees en vis', 749],
-  ['Boerenbrood', 'Brood', 289], ['Pistolets 6', 'Brood', 199],
-  ['Spuitwater 6x1,5l', 'Dranken', 359], ['Koffiebonen 1kg', 'Dranken', 1299], ['Bier Jupiler 24x25cl', 'Dranken', 1699],
-  ['Afwasmiddel', 'Huishouden', 249], ['Wasmiddel 2,2l', 'Huishouden', 899], ['Toiletpapier 24 rollen', 'Huishouden', 1199],
-  ['Tandpasta', 'Verzorging', 329], ['Shampoo', 'Verzorging', 449],
-  ['Diepvrieserwten 1kg', 'Diepvries', 229], ['Pizza 2 stuks', 'Diepvries', 599],
-  ['Pasta 1kg', 'Kruidenierswaren', 179], ['Rijst 1kg', 'Kruidenierswaren', 249], ['Olijfolie 1l', 'Kruidenierswaren', 899], ['Passata', 'Kruidenierswaren', 129],
+  ['Boerenbrood', 'Brood', 289], ['Pistolets 6', 'Brood', 199], ['Spuitwater 6x1,5l', 'Dranken', 359], ['Koffiebonen 1kg', 'Dranken', 1299],
+  ['Afwasmiddel', 'Huishouden', 249], ['Wasmiddel 2,2l', 'Huishouden', 899], ['Tandpasta', 'Verzorging', 329], ['Pizza 2 stuks', 'Diepvries', 599],
+  ['Pasta 1kg', 'Kruidenierswaren', 179], ['Olijfolie 1l', 'Kruidenierswaren', 899], ['Passata', 'Kruidenierswaren', 129],
 ];
-function receipt(total) {
-  const lines = []; let sum = 0;
+function receipt(total) { const lines = []; let sum = 0;
   while (sum < total - 800) { const [name, group, price] = pick(ITEMS); const qty = rnd() < .25 ? 2 : 1; lines.push({ name, group, qty, price }); sum += qty * price; }
-  const bon = rnd() < .6 ? Math.min(sum, between(1000, 4000)) : 0;
-  return { lines, total: sum, bon, kaart: sum - bon };
-}
-
+  const bon = rnd() < .6 ? Math.min(sum, between(1000, 4000)) : 0; return { lines, total: sum, bon, kaart: sum - bon }; }
 for (let i = FIRST; i <= LAST; i++) {
-  const { y, m } = fromYm(i);
-  const juni = m === 5, dec = m === 11;
-  // wages (holiday pay / year-end bonus arrive inside the wage line, decision #23)
+  const { y, m } = fromYm(i); const juni = m === 5, dec = m === 11;
   add({ date: dateStr(y, m, 27), account: 's-zicht', desc: `Loon ${MONTHS[m]} – Werkgever A`, counter: 'Werkgever A', amount: 265000 + (juni ? 236000 : 0) + (dec ? 248000 : 0), kind: 'inkomen', cat: 'Loon' });
   add({ date: dateStr(y, m, 26), account: 'p-zicht', desc: `Loon ${MONTHS[m]} – Werkgever B`, counter: 'Werkgever B', amount: 230000 + (juni ? 205000 : 0) + (dec ? 210000 : 0), kind: 'inkomen', cat: 'Loon' });
-  // contributions to the shared account: person's outflow (decision #5, #44)
   add({ date: dateStr(y, m, 1), account: 's-zicht', desc: 'Doorlopende opdracht naar gezamenlijke rekening', counter: 'Gezamenlijke zichtrekening', amount: -110000, kind: 'naar-samen', cat: 'Bijdrage gezamenlijk' });
   add({ date: dateStr(y, m, 1), account: 'p-zicht', desc: 'Doorlopende opdracht naar gezamenlijke rekening', counter: 'Gezamenlijke zichtrekening', amount: -110000, kind: 'naar-samen', cat: 'Bijdrage gezamenlijk' });
   add({ date: dateStr(y, m, 1), account: 'g-zicht', desc: 'Overschrijving van zichtrekening jij', counter: 'Zichtrekening jij', amount: 110000, kind: 'overdracht', cat: 'Eigen overdracht' });
   add({ date: dateStr(y, m, 1), account: 'g-zicht', desc: 'Overschrijving van zichtrekening partner', counter: 'Zichtrekening partner', amount: 110000, kind: 'overdracht', cat: 'Eigen overdracht' });
-  // own savings transfers (never counted)
   const sS = 40000 + (juni || dec ? 150000 : 0), sP = 35000 + (juni || dec ? 120000 : 0);
   add({ date: dateStr(y, m, 2), account: 's-zicht', desc: 'Naar spaarrekening', counter: 'Spaarrekening jij', amount: -sS, kind: 'overdracht', cat: 'Eigen overdracht' });
   add({ date: dateStr(y, m, 2), account: 's-spaar', desc: 'Van zichtrekening', counter: 'Zichtrekening jij', amount: sS, kind: 'overdracht', cat: 'Eigen overdracht' });
@@ -428,223 +358,195 @@ for (let i = FIRST; i <= LAST; i++) {
   add({ date: dateStr(y, m, 5), account: 's-zicht', desc: 'Periodieke belegging', counter: 'Beleggingen jij', amount: -15000, kind: 'overdracht', cat: 'Eigen overdracht' });
   if (m === 0) { add({ date: dateStr(y, m, 1), account: 's-spaar', desc: 'Creditinteresten en getrouwheidspremie', counter: 'Belfius', amount: 21430, kind: 'inkomen', cat: 'Rente' });
                  add({ date: dateStr(y, m, 1), account: 'p-spaar', desc: 'Creditinteresten en getrouwheidspremie', counter: 'Belfius', amount: 16210, kind: 'inkomen', cat: 'Rente' }); }
-  // shared account spending
   add({ date: dateStr(y, m, 3), account: 'g-zicht', desc: 'Doorlopende opdracht huur', counter: 'Verhuurder', amount: -105000, cat: 'Huur' });
   add({ date: dateStr(y, m, 8), account: 'g-zicht', desc: 'Domiciliëring Engie Electrabel', counter: 'Engie', amount: -14200, cat: 'Energie en water' });
   add({ date: dateStr(y, m, 12), account: 'g-zicht', desc: 'Domiciliëring Farys', counter: 'Farys', amount: -3300, cat: 'Energie en water' });
   add({ date: dateStr(y, m, 15), account: 'g-zicht', desc: 'Domiciliëring Telenet', counter: 'Telenet', amount: -6450, cat: 'Abonnementen' });
   add({ date: dateStr(y, m, 20), account: 'g-zicht', desc: 'Domiciliëring brandverzekering', counter: 'Verzekeraar', amount: -4120, cat: 'Overige' });
-  for (const d of [4, 11, 18, 25]) {
-    const r = receipt(between(9000, 19000));
-    add({ date: dateStr(y, m, d), account: 'g-zicht', desc: `Betaling Bancontact Colruyt Gent ${d}/${String(m + 1).padStart(2, '0')}`, counter: 'Colruyt', amount: -r.kaart, cat: 'Boodschappen', receipt: r });
-  }
+  add({ date: dateStr(y, m, 10), account: 'g-zicht', desc: 'Domiciliëring autoverzekering', counter: 'Verzekeraar auto', amount: -6800, cat: 'Vervoer' });
+  for (const d of [4, 11, 18, 25]) { const r = receipt(between(9000, 19000));
+    add({ date: dateStr(y, m, d), account: 'g-zicht', desc: `Betaling Bancontact Colruyt Gent ${d}/${String(m + 1).padStart(2, '0')}`, counter: 'Colruyt', amount: -r.kaart, cat: 'Boodschappen', receipt: r }); }
   for (let k = 0; k < between(1, 3); k++) add({ date: dateStr(y, m, between(2, 28)), account: 'g-zicht', desc: `Betaling Bancontact ${pick(['Delhaize', 'Aldi', 'Lidl'])}`, counter: 'Supermarkt', amount: -between(1500, 6000), cat: 'Boodschappen' });
   for (let k = 0; k < between(2, 4); k++) add({ date: dateStr(y, m, between(2, 28)), account: 'g-zicht', desc: `Betaling Bancontact ${pick(['Frituur De Hoek', 'Pizzeria Roma', 'Brasserie Centrum'])}`, counter: 'Horeca', amount: -between(3000, 9000), cat: 'Eten buitenshuis' });
-  add({ date: dateStr(y, m, 10), account: 'g-zicht', desc: 'Domiciliëring autoverzekering', counter: 'Verzekeraar auto', amount: -6800, cat: 'Vervoer' });
   for (let k = 0; k < between(1, 2); k++) add({ date: dateStr(y, m, between(2, 28)), account: 'g-zicht', desc: 'Betaling Bancontact Q8 tankstation', counter: 'Tankstation', amount: -between(5500, 8500), cat: 'Vervoer' });
   if (rnd() < .7) add({ date: dateStr(y, m, between(2, 28)), account: 'g-zicht', desc: `Betaling Bancontact ${pick(['Brico', 'IKEA', 'Action'])}`, counter: 'Winkel', amount: -between(2500, 12000), cat: null });
-  // personal current accounts
-  for (const [acc, who] of [['s-zicht', 'jij'], ['p-zicht', 'partner']]) {
+  for (const acc of ['s-zicht', 'p-zicht']) {
     add({ date: dateStr(y, m, between(2, 27)), account: acc, desc: 'Geldopname Belfius automaat', counter: 'Geldautomaat', amount: -pick([5000, 10000, 15000]), cat: 'Cash' });
     for (let k = 0; k < between(2, 4); k++) add({ date: dateStr(y, m, between(2, 27)), account: acc, desc: `Betaling Bancontact ${pick(['Bakkerij Van Hove', 'Apotheek Centrum', 'Kapsalon Studio', 'Standaard Boekhandel', 'Zalando', 'Decathlon'])}`, counter: 'Handelaar', amount: -between(800, 6500), cat: null });
     add({ date: dateStr(y, m, 6), account: acc, desc: 'Domiciliëring NMBS abonnement', counter: 'NMBS', amount: -7400, cat: 'Vervoer' });
     if (rnd() < .4) add({ date: dateStr(y, m, between(2, 27)), account: acc, desc: 'Betaling Payconiq Bol.com', counter: 'Bol.com', amount: -between(1500, 6000), cat: 'Cadeaus' });
     if (rnd() < .3) add({ date: dateStr(y, m, between(2, 27)), account: acc, desc: 'Betaling via Bancontact-app aan vriend P2P mobile', counter: 'Persoon', amount: -between(1000, 3500), cat: null });
-    // credit card: statement lines are the spending; the settlement on the current account is a transfer
-    let card = 0;
-    const kAcc = acc === 's-zicht' ? 's-kaart' : 'p-kaart';
-    for (const [desc, counter, cat, lo, hi] of [
-      ['Netflix', 'Netflix', 'Abonnementen', 1399, 1399], ['Spotify', 'Spotify', 'Abonnementen', 1099, 1099],
+    let card = 0; const kAcc = acc === 's-zicht' ? 's-kaart' : 'p-kaart';
+    for (const [desc, counter, cat, lo, hi] of [['Netflix', 'Netflix', 'Abonnementen', 1399, 1399], ['Spotify', 'Spotify', 'Abonnementen', 1099, 1099],
       ['Total Energies tankstation', 'Tankstation', 'Vervoer', 5500, 8500], ['Amazon', 'Amazon', null, 2000, 9000], ['Restaurant', 'Horeca', 'Eten buitenshuis', 3000, 9000], ['Kledingwinkel', 'Kledij', null, 3000, 11000]]) {
-      if (lo === hi || rnd() < .7) { const a = between(lo, hi); card += a; add({ date: dateStr(y, m, between(1, 26)), account: kAcc, desc, counter, amount: -a, cat }); }
-    }
+      if (lo === hi || rnd() < .7) { const a = between(lo, hi); card += a; add({ date: dateStr(y, m, between(1, 26)), account: kAcc, desc, counter, amount: -a, cat }); } }
     add({ date: dateStr(y, m, 28), account: acc, desc: 'Mastercard afrekening', counter: 'Belfius Mastercard', amount: -card, kind: 'overdracht', cat: 'Eigen overdracht' });
   }
-  // investment value change (fake; what the toggle means is still open)
   add({ date: dateStr(y, m, 28), account: 's-beleg', desc: 'Waardeverandering portefeuille', counter: '', amount: between(-18000, 26000), kind: 'belegging-waarde', cat: 'Beleggingen' });
 }
 TX.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
 
 // ---------- computations ----------
-const state = { period: 'm', cursor: LAST, who: 'stijn', inv: false, q: '', fcat: '', facc: '', unknown: false, screen: 'home' };
+const state = { period: 'm', cursor: LAST, who: 'stijn', inv: false, q: '', revAll: false };
 function periodRange() { const n = state.period === 'm' ? 1 : state.period === 'q' ? 3 : 12; return { from: state.cursor - n + 1, to: state.cursor, n }; }
-function periodLabel(r) { const a = fromYm(r.from), b = fromYm(r.to);
-  if (r.n === 1) return `${MONTHS[a.m]} ${a.y}`; if (r.n === 12 && a.m === 0) return String(a.y);
-  return `${MONTHS_SHORT[a.m]} ${a.y} – ${MONTHS_SHORT[b.m]} ${b.y}`; }
+function periodLabel(r) { const a = fromYm(r.from), b = fromYm(r.to); if (r.n === 1) return `${MONTHS[a.m]} ${a.y}`; if (r.n === 12 && a.m === 0) return String(a.y); return `${MS[a.m]} ${a.y} – ${MS[b.m]} ${b.y}`; }
 const txMonth = t => { const [y, m] = t.date.split('-').map(Number); return ym(y, m - 1); };
 const inRange = (t, r) => { const i = txMonth(t); return i >= r.from && i <= r.to; };
-function accountsFor(who) { return ACCOUNTS.filter(a => who === 'samen' ? true : a.owner === who); }
-function figures(who, r, inv) {
-  const accs = new Set(accountsFor(who).map(a => a.id));
-  let income = 0, spend = 0, toShared = 0, invest = 0;
+const accountsFor = who => ACCOUNTS.filter(a => who === 'samen' || a.owner === who);
+function figures(who, r, inv) { const accs = new Set(accountsFor(who).map(a => a.id)); let income = 0, spend = 0, toShared = 0, invest = 0;
   for (const t of TX) { if (!inRange(t, r) || !accs.has(t.account)) continue;
-    if (t.kind === 'inkomen') income += t.amount;
-    else if (t.kind === 'uitgave') spend += t.amount;
-    else if (t.kind === 'naar-samen' && who !== 'samen') toShared += t.amount;
-    else if (t.kind === 'belegging-waarde') invest += t.amount; }
-  const saved = income + spend + toShared + (inv ? invest : 0);
-  return { income, spend, toShared, invest, saved };
-}
+    if (t.kind === 'inkomen') income += t.amount; else if (t.kind === 'uitgave') spend += t.amount;
+    else if (t.kind === 'naar-samen' && who !== 'samen') toShared += t.amount; else if (t.kind === 'belegging-waarde') invest += t.amount; }
+  return { income, spend, toShared, invest, saved: income + spend + toShared + (inv ? invest : 0) }; }
 function catTotals(who, r) { const accs = new Set(accountsFor(who).map(a => a.id)); const m = {};
   for (const t of TX) { if (!inRange(t, r) || !accs.has(t.account)) continue; if (t.kind !== 'uitgave' && !(t.kind === 'naar-samen' && who !== 'samen')) continue;
-    const c = t.cat || 'Nog geen categorie'; m[c] = (m[c] || 0) + t.amount; }
-  return Object.entries(m).sort((a, b) => a[1] - b[1]); }
+    const c = t.cat || 'Nog geen categorie'; m[c] = (m[c] || 0) + t.amount; } return Object.entries(m).sort((a, b) => a[1] - b[1]); }
+function monthly(who) { const out = []; for (let i = FIRST; i <= LAST; i++) out.push(figures(who, { from: i, to: i, n: 1 }, false).saved); return out; }
 
-// ---------- render: overzicht ----------
-const $ = id => document.getElementById(id);
+// ---------- overzicht ----------
 function renderHome() {
   const r = periodRange(); const f = figures(state.who, r, state.inv);
-  $('period-label').textContent = periodLabel(r);
-  $('next').disabled = state.cursor >= LAST; $('prev').disabled = r.from <= FIRST;
-  const big = $('big'); big.textContent = fmt(f.saved); big.classList.toggle('negative', f.saved < 0);
+  $('period-label').textContent = periodLabel(r); $('next').disabled = state.cursor >= LAST; $('prev').disabled = r.from <= FIRST;
+  const flow = $('flow'); flow.classList.toggle('neg', f.saved < 0);
+  const strength = Math.min(1, Math.abs(f.saved) / Math.max(1, f.income)) ; flow.style.setProperty('--k', `${Math.round(35 + strength * 130)}%`);
+  $('big').textContent = fmt(f.saved);
   const whoLabel = state.who === 'stijn' ? 'heb jij' : state.who === 'partner' ? 'heeft je partner' : 'hebben jullie samen';
-  $('big-label').textContent = `${whoLabel} gespaard in ${periodLabel(r)}`;
-  // compare with previous period and 6-month median (motivation)
+  $('big-label').textContent = `${whoLabel} ${f.saved < 0 ? 'te kort' : 'gespaard'} in ${periodLabel(r)}`;
   const prev = figures(state.who, { from: r.from - r.n, to: r.to - r.n, n: r.n }, state.inv);
-  const last6 = []; for (let i = LAST - 5; i <= LAST; i++) last6.push(figures(state.who, { from: i, to: i, n: 1 }, state.inv).saved);
-  last6.sort((a, b) => a - b); const med = (last6[2] + last6[3]) / 2;
+  const s6 = []; for (let i = LAST - 5; i <= LAST; i++) s6.push(figures(state.who, { from: i, to: i, n: 1 }, state.inv).saved); s6.sort((a, b) => a - b);
   const diff = f.saved - prev.saved;
-  $('compare').innerHTML = `<span>vorige periode</span><b>${fmt(prev.saved)} <span class="${diff >= 0 ? 'plus' : 'minus'}">(${fmtSigned(diff)})</span></b>` +
-    (r.n === 1 ? `<span>mediaan laatste 6 maanden</span><b>${fmt(med)}</b>` : '');
-  const lines = [
-    `<li><span>Inkomsten</span><b class="plus">${fmtSigned(f.income)}</b></li>`,
-    `<li><span>Uitgaven${state.who === 'samen' ? ' (alle rekeningen)' : ''}</span><b class="minus">${fmtSigned(f.spend)}</b></li>`];
-  if (state.who !== 'samen') lines.push(`<li><span>Naar de gezamenlijke rekening</span><b class="minus">${fmtSigned(f.toShared)}</b></li>`);
-  if (state.inv) lines.push(`<li><span>Beleggingen, waardeverandering</span><b class="${f.invest >= 0 ? 'plus' : 'minus'}">${fmtSigned(f.invest)}</b></li>`);
-  lines.push(`<li class="dim"><span>Overdrachten tussen eigen rekeningen</span><b>niet meegeteld</b></li>`);
-  lines.push(`<li class="total"><span>Gespaard</span><b>${fmt(f.saved)}</b></li>`);
+  $('compare').innerHTML = `<span>vorige periode</span><b>${fmt(prev.saved)} (${fmtSigned(diff)})</b>` + (r.n === 1 ? `<span>mediaan laatste 6 maanden</span><b>${fmt((s6[2] + s6[3]) / 2)}</b>` : '');
+  const lines = [`<li><span>Inkomsten</span><b>${fmtSigned(f.income)}</b></li>`, `<li><span>Uitgaven${state.who === 'samen' ? ' (alle rekeningen)' : ''}</span><b>${fmtSigned(f.spend)}</b></li>`];
+  if (state.who !== 'samen') lines.push(`<li><span>Naar de gezamenlijke rekening</span><b>${fmtSigned(f.toShared)}</b></li>`);
+  if (state.inv) lines.push(`<li><span>Beleggingen, waardeverandering</span><b>${fmtSigned(f.invest)}</b></li>`);
+  lines.push(`<li class="dim"><span>Overdrachten tussen eigen rekeningen</span><b>niet meegeteld</b></li>`, `<li class="total"><span>Gespaard</span><b>${fmt(f.saved)}</b></li>`);
   $('lines').innerHTML = lines.join('');
-  // categories
   const cats = catTotals(state.who, r); const max = Math.max(1, ...cats.map(c => -c[1]));
-  $('cats').innerHTML = cats.map(([c, a]) => `<li><span class="name" data-cat="${c}">${c}</span><span class="bar"><i style="width:${(-a / max * 100).toFixed(1)}%"></i></span><span class="amt">${fmt(-a)}</span></li>`).join('');
+  $('cats').innerHTML = cats.map(([c, a]) => `<li><span>${c}</span><span class="bar"><i style="width:${(-a / max * 100).toFixed(1)}%"></i></span><span class="amt">${fmt(-a)}</span></li>`).join('');
   renderTx(r);
 }
-function renderTx(r) {
-  const accs = new Set(accountsFor(state.who).map(a => a.id)); const q = state.q.toLowerCase();
-  const rows = TX.filter(t => inRange(t, r) && accs.has(t.account) && t.kind !== 'belegging-waarde'
-    && (!q || t.desc.toLowerCase().includes(q) || (t.counter || '').toLowerCase().includes(q))
-    && (!state.fcat || (state.fcat === '__none' ? !t.cat : t.cat === state.fcat))
-    && (!state.facc || t.account === state.facc)
-    && (!state.unknown || !t.cat));
+function renderTx(r) { const accs = new Set(accountsFor(state.who).map(a => a.id)); const q = state.q.toLowerCase();
+  const rows = TX.filter(t => inRange(t, r) && accs.has(t.account) && t.kind !== 'belegging-waarde' && (!q || t.desc.toLowerCase().includes(q) || (t.counter || '').toLowerCase().includes(q)));
   $('tx-count').textContent = `${rows.length} in ${periodLabel(r)}`;
-  if (!rows.length) { $('tx-body').innerHTML = `<tr><td colspan="5" class="empty">Geen verrichtingen voor deze filters.</td></tr>`; return; }
-  $('tx-body').innerHTML = rows.map(t => {
-    const transfer = t.kind === 'overdracht';
-    const chip = transfer ? `<span class="chip" style="color:var(--muted)">eigen overdracht</span>`
-      : `<select class="chip ${t.cat ? '' : 'none'}" data-id="${t.id}"><option value="">nog geen categorie</option>${[...CATS, 'Loon', 'Rente', 'Bijdrage gezamenlijk'].map(c => `<option ${t.cat === c ? 'selected' : ''}>${c}</option>`).join('')}</select>`;
-    const rec = t.receipt ? ` <button class="expand prop" data-rec="${t.id}">kasticket</button><div class="receipt" id="rec-${t.id}" hidden><table>${t.receipt.lines.map(l => `<tr><td>${l.qty > 1 ? l.qty + ' × ' : ''}${l.name}</td><td class="m">${l.group}</td><td class="amt">${fmt(l.qty * l.price)}</td></tr>`).join('')}</table><div class="pay">Te betalen ${fmt(t.receipt.total)}: maaltijdcheques ${fmt(t.receipt.bon)}, kaart ${fmt(t.receipt.kaart)}</div></div>` : '';
-    return `<tr class="${transfer ? 'transfer' : ''}"><td class="date">${shortDate(t.date)}</td><td>${t.desc}${rec}</td><td class="acc">${ACC[t.account].name}</td><td>${chip}</td><td class="amt ${transfer ? '' : t.amount < 0 ? 'minus' : 'plus'}">${fmtSigned(t.amount)}</td></tr>`;
-  }).join('');
+  if (!rows.length) { $('tx-body').innerHTML = `<tr><td colspan="4" class="empty">Geen verrichtingen.</td></tr>`; return; }
+  $('tx-body').innerHTML = rows.map(t => { const tr = t.kind === 'overdracht';
+    const rec = t.receipt ? `<button class="expand prop" data-rec="${t.id}">kasticket</button><div class="receipt" id="rec-${t.id}" hidden><table>${t.receipt.lines.map(l => `<tr><td>${l.qty > 1 ? l.qty + ' × ' : ''}${l.name}</td><td>${l.group}</td><td class="amt">${fmt(l.qty * l.price)}</td></tr>`).join('')}</table><div class="pay">Te betalen ${fmt(t.receipt.total)}: maaltijdcheques ${fmt(t.receipt.bon)}, kaart ${fmt(t.receipt.kaart)}</div></div>` : '';
+    return `<tr class="${tr ? 'transfer' : ''}"><td class="date">${shortDate(t.date)}</td><td>${t.desc}${rec}</td><td class="cat">${tr ? 'eigen overdracht' : (t.cat || '<span style="color:var(--prop)">nog geen categorie</span>')}</td><td class="amt ${tr ? '' : t.amount < 0 ? 'neg' : 'pos'}">${fmtSigned(t.amount)}</td></tr>`; }).join(''); }
+
+// ---------- documenten ----------
+function renderDocs() {
+  const rows = TX.filter(t => t.kind === 'uitgave' && (state.revAll || !t.cat)).slice(0, state.revAll ? 60 : 200);
+  $('rev-count').textContent = state.revAll ? `laatste ${rows.length}` : `${rows.length} zonder categorie`;
+  const opts = t => `<option value="">nog geen categorie</option>` + CATS.map(c => `<option ${t.cat === c ? 'selected' : ''}>${c}</option>`).join('');
+  $('rev-body').innerHTML = rows.map(t => `<tr><td class="date">${shortDate(t.date)}</td><td class="desc">${t.desc}<br><small>${t.counter || ''}</small></td><td class="acc">${ACC[t.account].name}</td><td><select class="cat ${t.cat ? '' : 'none'}" data-id="${t.id}">${opts(t)}</select></td><td><label class="remember prop"><input type="checkbox"> onthoud</label></td><td class="amt">${fmtSigned(t.amount)}</td></tr>`).join('');
 }
 
-// ---------- render: projectie ----------
-function params() { const f = new FormData($('params')); const o = {}; for (const [k, v] of f) o[k] = isNaN(+v) ? v : +v; return o; }
-function saveMedian() { const s = []; for (let i = LAST - 5; i <= LAST; i++) s.push(figures('samen', { from: i, to: i, n: 1 }, false).saved); s.sort((a, b) => a - b); return { med: (s[2] + s[3]) / 2, p25: s[1], p75: s[4] }; }
-function annuityMax(payment, rateYear, years) { const i = Math.pow(1 + rateYear / 100, 1 / 12) - 1; const n = years * 12; return payment * (1 - Math.pow(1 + i, -n)) / i; }
-function costs(price, loan) { // 2 % registration, notary scale approximated, mortgage duties on 110 % of the loan, fixed deed costs
-  const notary = Math.min(price * 0.0114 + 900, 5200) * 1.21; return price * 0.02 + notary + loan * 1.1 * 0.013 + 1800; }
-function maxBid(p) { // both limits must hold: LTV and repayment share; own money covers price − loan + costs
-  const pay = (p.incS + p.incP) * p.dti / 100 - 60;      // 60 €/month insurance placeholder for two borrowers
-  const loanByIncome = annuityMax(pay, p.mrate, p.years);
-  let lo = 50000, hi = 900000;
-  for (let k = 0; k < 40; k++) { const price = (lo + hi) / 2; const loan = Math.min(loanByIncome, price * p.ltv / 100);
-    const need = price - loan + costs(price, loan); if (need <= p.own) lo = price; else hi = price; }
-  const price = lo, loan = Math.min(loanByIncome, price * p.ltv / 100);
-  return { price, loan, need: price - loan + costs(price, loan), loanByIncome };
-}
-function ownNeeded(p, price) { const loan = Math.min(annuityMax((p.incS + p.incP) * p.dti / 100 - 60, p.mrate, p.years), price * p.ltv / 100); return price - loan + costs(price, loan); }
-let scenarios = [{ name: 'Huidig ritme', delta: 0, color: '#1c2229' }, { name: 'Partner naar 5/5', delta: 380, color: '#2b4c7e' }, { name: 'Opslag jij', delta: 150, color: '#7a5c9e' }];
+// ---------- projectie ----------
+const COLORS = ['#3987e5', '#d95926', '#199e70', '#9085e9'];
+let scenarios = [
+  { name: 'Huidig ritme', incS: 2650, incP: 2300, extra: 0,   rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
+  { name: 'Partner naar 5/5', incS: 2650, incP: 2680, extra: 380, rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
+  { name: 'Opslag jij', incS: 2800, incP: 2300, extra: 150, rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
+];
+let sel = 0;
+const OWN_TODAY = 3100000; // cents, measured (mock)
+function globals() { const f = new FormData($('params')); const o = {}; for (const [k, v] of f) o[k] = isNaN(+v) ? v : +v; return o; }
+function stats() { const s = monthly('samen').slice(-6).sort((a, b) => a - b); return { med: (s[2] + s[3]) / 2, p25: s[1], p75: s[4] }; }
+const annuityMax = (pay, rateYear, years) => { const i = Math.pow(1 + rateYear / 100, 1 / 12) - 1; const n = years * 12; return pay * (1 - Math.pow(1 + i, -n)) / i; };
+const costs = (price, loan) => { const notary = Math.min(price * 0.0114 + 900, 5200) * 1.21; return price * 0.02 + notary + loan * 1.1 * 0.013 + 1800; };
+function ownNeeded(sc, price) { const loan = Math.min(annuityMax((sc.incS + sc.incP) * sc.dti / 100 - 60, sc.mrate, sc.years), price * sc.ltv / 100); return price - loan + costs(price, loan); }
+function maxBid(sc, own) { const loanByIncome = annuityMax((sc.incS + sc.incP) * sc.dti / 100 - 60, sc.mrate, sc.years); let lo = 50000, hi = 900000;
+  for (let k = 0; k < 40; k++) { const price = (lo + hi) / 2; const loan = Math.min(loanByIncome, price * sc.ltv / 100); if (price - loan + costs(price, loan) <= own) lo = price; else hi = price; }
+  const loan = Math.min(loanByIncome, lo * sc.ltv / 100); return { price: lo, loan, need: lo - loan + costs(lo, loan) }; }
 function renderProj() {
-  const p = params(); const { med, p25, p75 } = saveMedian();
-  if (!p.save) { $('params').save.value = Math.round(med / 100); p.save = Math.round(med / 100); }
-  const months = p.horizon * 12; const r = Math.pow(1 + p.rate / 100, 1 / 12);
-  const series = perMonth => { let v = p.own; const out = [v]; for (let k = 1; k <= months; k++) { v = v * r + perMonth; out.push(v); } return out; };
-  const exp = series(p.save), low = series(p.save * (p25 / med)), high = series(p.save * (p75 / med));
-  const need = []; for (let k = 0; k <= months; k++) need.push(ownNeeded(p, p.price * Math.pow(1 + p.growth / 100, k / 12)));
-  const scen = scenarios.map(s => Object.assign({ pts: series(p.save + s.delta) }, s));
-  // chart
-  const W = 760, H = 380, L = 64, R = 16, T = 16, B = 40; const all = [...exp, ...low, ...high, ...need, p.goal, ...scen.flatMap(s => s.pts)];
-  const ymax = Math.max(...all) * 1.05, ymin = Math.min(0, ...all);
-  const X = k => L + (W - L - R) * k / months, Y = v => T + (H - T - B) * (1 - (v - ymin) / (ymax - ymin));
-  const path = pts => pts.map((v, k) => `${k ? 'L' : 'M'}${X(k).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
-  const band = `${path(high)} ${low.map((v, k) => `L${X(low.length - 1 - k).toFixed(1)},${Y(low[low.length - 1 - k]).toFixed(1)}`).join(' ')} Z`;
-  let g = ''; const step = Math.pow(10, Math.floor(Math.log10(ymax))) / 2;
-  for (let v = 0; v <= ymax; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eceef0"/><text x="${L - 8}" y="${Y(v) + 4}" font-size="11" text-anchor="end" fill="#6a7380">${Math.round(v / 1000)} k</text>`;
-  const now = fromYm(LAST);
-  for (let k = 0; k <= months; k += 12) { const d = fromYm(LAST + k); g += `<text x="${X(k)}" y="${H - 14}" font-size="11" text-anchor="middle" fill="#6a7380">${d.y}</text>`; }
-  const crossAt = pts => { for (let k = 0; k < pts.length; k++) if (pts[k] >= need[k]) return k; return null; };
-  const ke = crossAt(exp), kl = crossAt(low), kh = crossAt(high);
-  const mark = (k, col) => k == null ? '' : `<circle cx="${X(k)}" cy="${Y(exp[k] || need[k])}" r="5" fill="${col}"/>`;
-  $('chart').innerHTML = g +
-    `<path d="${band}" fill="#c9ced4" opacity=".5"/>` +
-    `<path d="${path(need)}" fill="none" stroke="#a3462b" stroke-width="2" stroke-dasharray="6 4"/>` +
-    `<line x1="${L}" x2="${W - R}" y1="${Y(p.goal)}" y2="${Y(p.goal)}" stroke="#2b4c7e" stroke-width="1.5" stroke-dasharray="2 4"/>` +
-    scen.filter(s => s.delta).map(s => `<path d="${path(s.pts)}" fill="none" stroke="${s.color}" stroke-width="1.5" opacity=".8"/>`).join('') +
-    `<path d="${path(exp)}" fill="none" stroke="#1c2229" stroke-width="2.5"/>` + mark(ke, '#1c2229') +
-    `<text x="${W - R}" y="${Y(p.goal) - 6}" font-size="11" text-anchor="end" fill="#2b4c7e">doellijn ${eur.format(p.goal)}</text>`;
+  const g = globals(); const st = stats(); const own = OWN_TODAY / 100; const save = st.med / 100;
+  $('fact-own').textContent = eur0.format(own); $('fact-save').textContent = eur0.format(save) + ' / maand'; $('fact-band').textContent = `${eur0.format(st.p25 / 100)} – ${eur0.format(st.p75 / 100)}`;
+  // history: 12 months back from today (measured)
+  const hist = monthly('samen').map(c => c / 100); const past = [own]; for (let k = hist.length - 1; k >= 0; k--) past.unshift(past[0] - hist[k]);
+  const H = past.length - 1; // months of history
+  const months = g.horizon * 12;
+  const series = (sc, perMonth) => { const r = Math.pow(1 + sc.rate / 100, 1 / 12); let v = own; const out = [v]; for (let k = 1; k <= months; k++) { v = v * r + perMonth; out.push(v); } return out; };
+  const S = scenarios.map(sc => ({ sc, exp: series(sc, save + sc.extra), low: series(sc, save * (st.p25 / st.med) + sc.extra), high: series(sc, save * (st.p75 / st.med) + sc.extra),
+    need: Array.from({ length: months + 1 }, (_, k) => ownNeeded(sc, g.price * Math.pow(1 + sc.growth / 100, k / 12))) }));
+  const cur = S[sel];
+  // chart geometry: x from -H to months
+  const W = 800, Hh = 380, L = 62, R = 18, T = 18, B = 40; const all = [...past, ...S.flatMap(s => [...s.exp, ...s.high, ...s.need]), g.goal];
+  const ymax = Math.max(...all) * 1.06, ymin = Math.min(0, ...past, ...cur.low) ;
+  const X = k => L + (W - L - R) * (k + H) / (months + H), Y = v => T + (Hh - T - B) * (1 - (v - ymin) / (ymax - ymin));
+  const path = (pts, off = 0) => pts.map((v, k) => `${k ? 'L' : 'M'}${X(k + off).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const band = `${path(cur.high)} ${cur.low.map((v, k) => { const j = cur.low.length - 1 - k; return `L${X(j).toFixed(1)},${Y(cur.low[j]).toFixed(1)}`; }).join(' ')} Z`;
+  let grid = ''; const step = Math.pow(10, Math.floor(Math.log10(ymax))) / 2;
+  for (let v = Math.ceil(ymin / step) * step; v <= ymax; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2a3441"/><text x="${L - 8}" y="${Y(v) + 4}" font-size="11" text-anchor="end" fill="#6f7b8a">${Math.round(v / 1000)} k</text>`;
+  for (let k = -H; k <= months; k++) { const d = fromYm(LAST + k); if (d.m === 0) grid += `<text x="${X(k)}" y="${Hh - 14}" font-size="11" text-anchor="middle" fill="#6f7b8a">${MS[d.m]} ${d.y}</text>`; }
+  const crossAt = (pts, need) => { for (let k = 0; k < pts.length; k++) if (pts[k] >= need[k]) return k; return null; };
   const when = k => { if (k == null) return 'niet binnen de horizon'; const d = fromYm(LAST + k); return `${MONTHS[d.m]} ${d.y}`; };
-  const mb = maxBid(p);
-  const todayNeed = ownNeeded(p, p.price);
-  $('results').innerHTML =
-    `<div><small>Wat jullie vandaag kunnen bieden</small><b>${eur.format(Math.round(mb.price / 1000) * 1000)}</b><small>lening ${eur.format(Math.round(mb.loan / 1000) * 1000)}, eigen inbreng ${eur.format(Math.round(mb.need / 100) * 100)}</small></div>` +
-    `<div><small>Eigen inbreng nodig voor de mediaanwoning</small><b>${eur.format(Math.round(todayNeed / 100) * 100)}</b><small>${p.type === 'open' ? 'open' : 'halfopen'} in ${p.prov}, ${eur.format(p.price)} vandaag, kosten inbegrepen</small></div>` +
-    `<div><small>Verwacht bereikt</small><b>${when(ke)}</b><small>tussen ${when(kh)} en ${when(kl)}</small></div>`;
-  // "how are we doing and what should we be doing": required pace for a chosen date (12 months from now as an example anchor)
-  const target = 12; const needThen = need[target]; const req = (needThen - p.own * Math.pow(r, target)) / target;
-  const ok = p.save >= req;
-  $('advice').innerHTML = `Om over een jaar, in ${when(target)}, de mediaanwoning te kunnen kopen moeten jullie <b class="${ok ? '' : 'short'}">${eur.format(Math.round(req / 10) * 10)} per maand</b> sparen. Nu is dat ${eur.format(p.save)}${ok ? ', dus dat lukt' : `, dus ${eur.format(Math.round((req - p.save) / 10) * 10)} te weinig`}. Bij het huidige ritme is het ${when(ke)}.`;
-  $('scen').innerHTML = scenarios.map((s, i) => `<li><i style="background:${s.color}"></i><span>${s.name}</span><small>${s.delta ? '+ ' + eur.format(s.delta) + ' / maand' : 'gemeten'}</small><small>${when(crossAt(scen[i].pts))}</small></li>`).join('');
+  $('chart').innerHTML = grid +
+    `<rect x="${L}" y="${T}" width="${X(0) - L}" height="${Hh - T - B}" fill="#ffffff" opacity=".035"/>` +
+    `<line x1="${X(0)}" x2="${X(0)}" y1="${T}" y2="${Hh - B}" stroke="#6f7b8a" stroke-dasharray="3 3"/><text x="${X(0) + 6}" y="${T + 12}" font-size="11" fill="#aab4c2">vandaag</text>` +
+    `<path d="${band}" fill="${COLORS[sel]}" opacity=".18"/>` +
+    `<path d="${path(cur.need)}" fill="none" stroke="#e66767" stroke-width="2" stroke-dasharray="7 5"/>` +
+    `<line x1="${L}" x2="${W - R}" y1="${Y(g.goal)}" y2="${Y(g.goal)}" stroke="#c98500" stroke-width="1.5" stroke-dasharray="2 5"/>` +
+    S.map((s, i) => i === sel ? '' : `<path d="${path(s.exp)}" fill="none" stroke="${COLORS[i]}" stroke-width="1.5" opacity=".7"/>`).join('') +
+    `<path d="${path(cur.exp)}" fill="none" stroke="${COLORS[sel]}" stroke-width="3"/>` +
+    `<path d="${path(past, -H)}" fill="none" stroke="#f2f4f7" stroke-width="3"/>` +
+    `<circle cx="${X(0)}" cy="${Y(own)}" r="5" fill="#f2f4f7"/>` +
+    (() => { const k = crossAt(cur.exp, cur.need); return k == null ? '' : `<circle cx="${X(k)}" cy="${Y(cur.exp[k])}" r="6" fill="${COLORS[sel]}" stroke="#171e28" stroke-width="2"/>`; })() +
+    `<text x="${W - R}" y="${Y(g.goal) - 6}" font-size="11" text-anchor="end" fill="#c98500">doellijn ${eur0.format(g.goal)}</text>`;
+  $('legend').innerHTML = `<span><i style="background:#f2f4f7"></i>gemeten (laatste 12 maanden)</span>` + S.map((s, i) => `<span><i style="background:${COLORS[i]}"></i>${s.sc.name}</span>`).join('') +
+    `<span><i style="background:${COLORS[sel]};opacity:.3;height:10px"></i>P25–P75 van het gekozen scenario</span><span><i style="background:#e66767"></i>eigen inbreng nodig</span><span><i style="background:#c98500"></i>doellijn</span>`;
+  const needToday = ownNeeded(cur.sc, g.price); const scale = Math.max(needToday, g.goal); const pct = Math.min(100, own / scale * 100); const yearAgo = past[0];
+  $('progress').innerHTML = `<div class="track"><i style="width:${pct.toFixed(1)}%"></i><b style="left:${(needToday / scale * 100).toFixed(1)}%;background:#e66767" title="eigen inbreng nodig"></b><b style="left:${Math.min(99.5, g.goal / scale * 100).toFixed(1)}%" title="doellijn"></b></div>
+    <div class="row"><span><strong>${eur0.format(own)}</strong> van ${eur0.format(needToday)} eigen inbreng nodig, <strong>${Math.round(pct)} %</strong></span><span>een jaar geleden ${eur0.format(yearAgo)}, dus <strong class="pos">+ ${eur0.format(own - yearAgo)}</strong></span></div>`;
+  const mb = maxBid(cur.sc, own); const ke = crossAt(cur.exp, cur.need), kl = crossAt(cur.low, cur.need), kh = crossAt(cur.high, cur.need);
+  $('results').innerHTML = `<div><small>Wat jullie vandaag kunnen bieden</small><b>${eur0.format(Math.round(mb.price / 1000) * 1000)}</b><small>lening ${eur0.format(Math.round(mb.loan / 1000) * 1000)}</small></div>` +
+    `<div><small>Eigen inbreng nodig, mediaanwoning</small><b>${eur0.format(Math.round(needToday / 100) * 100)}</b><small>${g.type} in ${g.prov}, kosten inbegrepen</small></div>` +
+    `<div><small>Bereikt in dit scenario</small><b>${when(ke)}</b><small>tussen ${when(kh)} en ${when(kl)}</small></div>`;
+  const target = 12; const r = Math.pow(1 + cur.sc.rate / 100, 1 / 12); const req = (cur.need[target] - own * Math.pow(r, target)) / target; const pace = save + cur.sc.extra; const ok = pace >= req;
+  $('advice').innerHTML = `Om over een jaar, in ${when(target)}, de mediaanwoning te kunnen kopen moeten jullie <b class="${ok ? '' : 'short'}">${eur0.format(Math.round(req / 10) * 10)} per maand</b> sparen. In dit scenario is dat ${eur0.format(Math.round(pace))}${ok ? ', dus dat lukt' : `, dus ${eur0.format(Math.round((req - pace) / 10) * 10)} te weinig`}.`;
+  $('scen-bar').innerHTML = scenarios.map((s, i) => `<button class="chip ${i === sel ? 'on' : ''}" data-i="${i}"><i style="background:${COLORS[i]}"></i>${s.name}</button>`).join('') +
+    (scenarios.length < 4 ? `<button class="chip" data-new="1">+ Nieuw scenario</button>` : `<small>maximum 4 scenario's naast elkaar</small>`);
+  const sc = cur.sc;
+  $('scen-edit').innerHTML = `<div style="display:flex;align-items:center;gap:12px"><i style="width:12px;height:12px;border-radius:50%;background:${COLORS[sel]}"></i><input class="name" name="name" value="${sc.name}"><small>de opties van dit scenario; het gemeten spaarritme is het vertrekpunt</small></div>
+    <div class="grid">
+      <label>Inkomen jij <input type="number" name="incS" value="${sc.incS}"></label>
+      <label>Inkomen partner <input type="number" name="incP" value="${sc.incP}"></label>
+      <label>Extra sparen <input type="number" name="extra" value="${sc.extra}"></label>
+      <label>Rente sparen % <input type="number" step="0.1" name="rate" value="${sc.rate}"></label>
+      <label>Hypotheekrente % <input type="number" step="0.1" name="mrate" value="${sc.mrate}"></label>
+      <label>Looptijd (jaren) <input type="number" name="years" value="${sc.years}"></label>
+      <label>Max. lening % <input type="number" name="ltv" value="${sc.ltv}"></label>
+      <label>Max. aflossing % <input type="number" name="dti" value="${sc.dti}"></label>
+      <label>Prijsgroei % <input type="number" step="0.1" name="growth" value="${sc.growth}"></label>
+    </div>
+    <div class="actions"><button class="btn primary small" data-act="save">Scenario opslaan</button><button class="btn small" data-act="dup">Dupliceren</button><button class="btn small ghost" data-act="del" ${scenarios.length === 1 ? 'disabled' : ''}>Verwijderen</button></div>`;
 }
-
-// ---------- render: analyse ----------
-function renderAna() {
-  const bars = []; for (let i = LAST - 11; i <= LAST; i++) bars.push([i, figures('samen', { from: i, to: i, n: 1 }, false).saved]);
-  const mx = Math.max(...bars.map(b => Math.abs(b[1])));
-  $('ana-bars').innerHTML = bars.map(([i, v]) => `<div class="${v < 0 ? 'neg' : ''}" style="height:${(Math.abs(v) / mx * 100).toFixed(0)}%"><span>${Math.round(v / 100).toLocaleString('nl-BE')}</span></div>`).join('');
-  $('ana-bars-x').innerHTML = bars.map(([i]) => `<span>${MONTHS_SHORT[fromYm(i).m]}</span>`).join('');
-  const r3 = { from: LAST - 2, to: LAST, n: 3 };
-  const byCounter = {}; for (const t of TX) if (inRange(t, r3) && t.kind === 'uitgave') byCounter[t.counter || t.desc] = (byCounter[t.counter || t.desc] || 0) + t.amount;
-  $('ana-counter').innerHTML = Object.entries(byCounter).sort((a, b) => a[1] - b[1]).slice(0, 8).map(([c, a]) => `<tr><td>${c}</td><td class="amt">${fmt(-a)}</td></tr>`).join('');
-  const fixed = {}; for (const t of TX) if (t.kind === 'uitgave' && t.cat !== 'Cash') { const k = `${t.counter}|${t.amount}`; (fixed[k] = fixed[k] || { t, n: 0 }).n++; }
-  $('ana-fixed').innerHTML = Object.values(fixed).filter(f => f.n >= 3).sort((a, b) => a.t.amount - b.t.amount).map(f => `<tr><td>${f.t.counter}</td><td class="m">${f.n} maanden</td><td class="amt">${fmt(-f.t.amount)} / maand</td></tr>`).join('');
-  let bon = 0, kaart = 0; const groups = {};
-  for (const t of TX) if (inRange(t, r3) && t.receipt) { bon += t.receipt.bon; kaart += t.receipt.kaart; for (const l of t.receipt.lines) groups[l.group] = (groups[l.group] || 0) + l.qty * l.price; }
-  $('ana-bon').textContent = fmt(bon); $('ana-kaart').textContent = fmt(kaart);
-  $('ana-groups').innerHTML = Object.entries(groups).sort((a, b) => b[1] - a[1]).map(([g, a]) => `<tr><td>${g}</td><td class="amt">${fmt(a)}</td></tr>`).join('');
-}
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
 
 // ---------- wiring ----------
-function show(screen) { state.screen = screen; document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === screen));
-  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.screen === screen));
-  if (screen === 'proj') renderProj(); if (screen === 'ana') renderAna(); }
-$('nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.screen); });
-$('seg-period').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.period = b.dataset.p;
-  document.querySelectorAll('#seg-period button').forEach(x => x.classList.toggle('on', x === b)); renderHome(); });
-$('seg-who').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.who = b.dataset.w;
-  document.querySelectorAll('#seg-who button').forEach(x => x.classList.toggle('on', x === b)); fillAccountFilter(); renderHome(); });
+function show(screen) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === screen)); document.querySelectorAll('.side button.nav[data-screen]').forEach(b => b.classList.toggle('on', b.dataset.screen === screen));
+  if (screen === 'proj') renderProj(); if (screen === 'docs') renderDocs(); }
+document.querySelectorAll('.side button.nav[data-screen]').forEach(b => b.addEventListener('click', () => show(b.dataset.screen)));
+$('seg-period').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.period = b.dataset.p; document.querySelectorAll('#seg-period button').forEach(x => x.classList.toggle('on', x === b)); renderHome(); });
+$('seg-who').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.who = b.dataset.w; document.querySelectorAll('#seg-who button').forEach(x => x.classList.toggle('on', x === b)); renderHome(); });
 $('prev').addEventListener('click', () => { state.cursor -= periodRange().n; renderHome(); });
 $('next').addEventListener('click', () => { state.cursor = Math.min(LAST, state.cursor + periodRange().n); renderHome(); });
 $('tog-inv').addEventListener('change', e => { state.inv = e.target.checked; renderHome(); });
 $('q').addEventListener('input', e => { state.q = e.target.value; renderTx(periodRange()); });
-$('f-cat').addEventListener('change', e => { state.fcat = e.target.value; renderTx(periodRange()); });
-$('f-acc').addEventListener('change', e => { state.facc = e.target.value; renderTx(periodRange()); });
-$('f-unknown').addEventListener('change', e => { state.unknown = e.target.checked; renderTx(periodRange()); });
-$('cats').addEventListener('click', e => { const n = e.target.closest('.name'); if (!n) return; const c = n.dataset.cat;
-  state.fcat = c === 'Nog geen categorie' ? '__none' : c; $('f-cat').value = state.fcat; renderTx(periodRange()); $('tx-body').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 $('tx-body').addEventListener('click', e => { const b = e.target.closest('[data-rec]'); if (!b) return; const d = $('rec-' + b.dataset.rec); d.hidden = !d.hidden; });
-$('tx-body').addEventListener('change', e => { const s = e.target.closest('select[data-id]'); if (!s) return; const t = TX.find(x => x.id == s.dataset.id); t.cat = s.value || null; renderHome(); });
+$('rev-all').addEventListener('change', e => { state.revAll = e.target.checked; renderDocs(); });
+$('rev-body').addEventListener('change', e => { const s = e.target.closest('select[data-id]'); if (!s) return; TX.find(x => x.id == s.dataset.id).cat = s.value || null; s.classList.toggle('none', !s.value); });
 $('params').addEventListener('input', renderProj);
-$('add-scen').addEventListener('click', () => { const name = prompt('Naam van het scenario'); if (!name) return; const d = +prompt('Hoeveel meer per maand (€)?', '200') || 0;
-  scenarios.push({ name, delta: d, color: pick(['#5b8c5a', '#b07d2a', '#8c4f6b', '#3f7f8c']) }); renderProj(); });
-for (const [btn, panel] of [['btn-upload', 'panel-upload'], ['btn-settings', 'panel-settings']]) {
-  $(btn).addEventListener('click', () => { document.querySelectorAll('.panel').forEach(p => p.classList.remove('open')); $(panel).classList.add('open'); }); }
-document.querySelectorAll('.panel .close').forEach(b => b.addEventListener('click', () => b.closest('.panel').classList.remove('open')));
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.panel').forEach(p => p.classList.remove('open')); });
-
-function fillAccountFilter() { const sel = $('f-acc'); sel.innerHTML = `<option value="">Alle rekeningen</option>` + accountsFor(state.who).map(a => `<option value="${a.id}">${a.name}</option>`).join(''); state.facc = ''; }
-$('f-cat').innerHTML += CATS.map(c => `<option>${c}</option>`).join('') + `<option value="__none">Nog geen categorie</option>`;
+$('scen-bar').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.new) { scenarios.push(Object.assign({}, scenarios[sel], { name: `Scenario ${scenarios.length + 1}` })); sel = scenarios.length - 1; } else sel = +b.dataset.i; renderProj(); });
+$('scen-edit').addEventListener('input', e => { const i = e.target; if (!i.name) return; scenarios[sel][i.name] = i.name === 'name' ? i.value : +i.value; if (i.name !== 'name') renderProj(); else document.querySelector(`#scen-bar [data-i="${sel}"]`).lastChild.textContent = i.value; });
+$('scen-edit').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (!b) return;
+  if (b.dataset.act === 'save') toast(`“${scenarios[sel].name}” opgeslagen`);
+  if (b.dataset.act === 'dup' && scenarios.length < 4) { scenarios.push(Object.assign({}, scenarios[sel], { name: scenarios[sel].name + ' (kopie)' })); sel = scenarios.length - 1; renderProj(); }
+  if (b.dataset.act === 'del' && scenarios.length > 1) { scenarios.splice(sel, 1); sel = 0; renderProj(); } });
+$('btn-settings').addEventListener('click', () => $('drawer').classList.add('open'));
+document.querySelector('#drawer .close').addEventListener('click', () => $('drawer').classList.remove('open'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('drawer').classList.remove('open'); });
 $('accs').innerHTML = ACCOUNTS.map(a => `<li><span>${a.name}<small>${a.iban}</small></span><small>${a.type}</small></li>`).join('');
-fillAccountFilter();
 renderHome();
 </script>
 </body>
