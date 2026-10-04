@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>HouseSaver – mock-up 2</title>
-<meta name="viewport" content="width=1200">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
@@ -177,6 +177,64 @@
   .accs li { display: grid; grid-template-columns: 1fr auto; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
   .accs small { display: block; }
   .switch { display: flex; gap: 10px; align-items: center; margin: 6px 0; font-size: 14px; }
+
+  /* ---------- mobile (phone) ---------- */
+  @media (max-width: 640px) {
+    .app { grid-template-columns: 1fr; }
+    .side { position: fixed; top: auto; bottom: 0; left: 0; right: 0; height: auto; flex-direction: row; gap: 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); border-right: 0; border-top: 1px solid var(--line); background: var(--shell); z-index: 4; }
+    .logo, .side .spacer { display: none; }
+    .side button.nav { flex: 1; flex-direction: column; gap: 4px; padding: 8px 4px; font-size: 11px; border-radius: 10px; }
+    .side button.nav svg { width: 22px; height: 22px; }
+    .side button.nav.prop { outline-offset: -2px; } .side button.nav.prop::after { top: -2px; right: 2px; font-size: 9px; }
+    main { padding: 16px 16px 96px; max-width: none; }
+    .head { flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .head h2 { width: 100%; font-size: 20px; } .head > small { display: none; }
+    #seg-who { margin-left: 0; width: 100%; order: -1; } #seg-who button { flex: 1; text-align: center; }
+    #seg-period { width: 100%; } #seg-period button { flex: 1; text-align: center; padding: 7px 4px; }
+    .pnav { width: 100%; justify-content: space-between; } .pnav span { min-width: 0; flex: 1; }
+    .flow { padding: 20px 18px 18px; border-radius: 18px; }
+    .flow-top { grid-template-columns: 1fr; gap: 18px; }
+    .big { font-size: 46px; letter-spacing: -0.03em; } .big-label { font-size: 15px; }
+    .compare { grid-template-columns: 1fr; gap: 2px; width: auto; }
+    .compare span { font-size: 12px; opacity: .8; }
+    .lines li { padding: 7px 0; font-size: 14px; }
+    .cat-list { grid-template-columns: 1fr; gap: 6px; }
+    .cat-list li { grid-template-columns: 1fr auto; grid-template-areas: "name amt" "bar bar"; gap: 4px 10px; font-size: 14px; padding: 4px 0; }
+    .cat-list li span:first-child { grid-area: name; } .cat-list .bar { grid-area: bar; } .cat-list .amt { grid-area: amt; }
+    .list-head { flex-wrap: wrap; } .search { width: 100%; }
+    table.tx thead { display: none; }
+    table.tx tr { display: grid; grid-template-columns: 54px 1fr auto; grid-template-areas: "date desc amt" "date cat amt"; column-gap: 8px; border-bottom: 1px solid var(--line); padding: 9px 0; }
+    table.tx td { border: 0; padding: 0; }
+    table.tx td.date { grid-area: date; width: auto; font-size: 13px; padding-top: 2px; }
+    table.tx td:nth-child(2) { grid-area: desc; font-size: 14px; }
+    table.tx td.cat { grid-area: cat; width: auto; font-size: 12px; }
+    table.tx td.amt { grid-area: amt; align-self: start; padding-top: 1px; }
+    .receipt { margin-left: -62px; }
+    .docs { grid-template-columns: 1fr; gap: 16px; }
+    .panel { padding: 16px 16px; }
+    .review-head small { display: none; }
+    table.rev tr { display: grid; grid-template-columns: 54px 1fr auto; grid-template-areas: "date desc amt" ". acc acc" ". sel rem"; column-gap: 8px; row-gap: 6px; padding: 10px 0; border-top: 1px solid var(--line); }
+    table.rev td { border: 0; padding: 0; }
+    table.rev td.date { grid-area: date; width: auto; font-size: 13px; }
+    table.rev td.desc { grid-area: desc; min-width: 0; font-size: 14px; }
+    table.rev td.acc { grid-area: acc; width: auto; }
+    table.rev td:nth-child(4) { grid-area: sel; } table.rev td:nth-child(5) { grid-area: rem; justify-self: end; }
+    table.rev td.amt { grid-area: amt; width: auto; }
+    select.cat { max-width: 100%; }
+    .scen-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; margin: 0 -16px 10px; padding-left: 16px; scrollbar-width: none; }
+    .scen-bar .chip { white-space: nowrap; flex: 0 0 auto; }
+    .proj { grid-template-columns: 1fr; gap: 16px; }
+    .chart { padding: 8px 6px 4px; } .legend { font-size: 11px; gap: 10px; }
+    .progress .row { flex-direction: column; gap: 4px; }
+    .results { grid-template-columns: 1fr; gap: 10px; } .results b { font-size: 24px; }
+    .advice { font-size: 15px; }
+    .scen-edit { padding: 14px 16px; } .scen-edit .grid { grid-template-columns: 1fr; gap: 8px; }
+    .scen-edit .name { width: 100%; } .scen-edit > div:first-child { flex-wrap: wrap; } .scen-edit > div:first-child small { display: none; }
+    .scen-edit .actions { flex-wrap: wrap; }
+    .params { order: 2; }
+    .drawer { width: 100%; border-left: 0; padding: 22px 20px 100px; }
+    .toast { bottom: 90px; }
+  }
 </style>
 </head>
 <body>
@@ -470,19 +528,19 @@ function renderProj() {
     need: Array.from({ length: months + 1 }, (_, k) => ownNeeded(sc, g.price * Math.pow(1 + sc.growth / 100, k / 12))) }));
   const cur = S[sel];
   // chart geometry: x from -H to months
-  const W = 800, Hh = 380, L = 62, R = 18, T = 18, B = 40; const all = [...past, ...S.flatMap(s => [...s.exp, ...s.high, ...s.need]), g.goal];
+  const mob = window.innerWidth <= 640; const W = mob ? 420 : 800, Hh = mob ? 320 : 380, L = mob ? 44 : 62, R = mob ? 12 : 18, T = 18, B = mob ? 34 : 40; const fs = mob ? 12 : 11; $('chart').setAttribute('viewBox', `0 0 ${W} ${Hh}`); const all = [...past, ...S.flatMap(s => [...s.exp, ...s.high, ...s.need]), g.goal];
   const ymax = Math.max(...all) * 1.06, ymin = Math.min(0, ...past, ...cur.low) ;
   const X = k => L + (W - L - R) * (k + H) / (months + H), Y = v => T + (Hh - T - B) * (1 - (v - ymin) / (ymax - ymin));
   const path = (pts, off = 0) => pts.map((v, k) => `${k ? 'L' : 'M'}${X(k + off).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
   const band = `${path(cur.high)} ${cur.low.map((v, k) => { const j = cur.low.length - 1 - k; return `L${X(j).toFixed(1)},${Y(cur.low[j]).toFixed(1)}`; }).join(' ')} Z`;
-  let grid = ''; const step = Math.pow(10, Math.floor(Math.log10(ymax))) / 2;
-  for (let v = Math.ceil(ymin / step) * step; v <= ymax; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2a3441"/><text x="${L - 8}" y="${Y(v) + 4}" font-size="11" text-anchor="end" fill="#6f7b8a">${Math.round(v / 1000)} k</text>`;
-  for (let k = -H; k <= months; k++) { const d = fromYm(LAST + k); if (d.m === 0) grid += `<text x="${X(k)}" y="${Hh - 14}" font-size="11" text-anchor="middle" fill="#6f7b8a">${MS[d.m]} ${d.y}</text>`; }
+  let grid = ''; const step = Math.pow(10, Math.floor(Math.log10(ymax))) / (mob ? 1 : 2);
+  for (let v = Math.ceil(ymin / step) * step; v <= ymax; v += step) grid += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2a3441"/><text x="${L - 6}" y="${Y(v) + 4}" font-size="${fs}" text-anchor="end" fill="#6f7b8a">${Math.round(v / 1000)}k</text>`;
+  for (let k = -H; k <= months; k++) { const d = fromYm(LAST + k); if (d.m === 0 && (!mob || d.y % 2 === 1)) grid += `<text x="${X(k)}" y="${Hh - 12}" font-size="${fs}" text-anchor="middle" fill="#6f7b8a">${mob ? d.y : MS[d.m] + ' ' + d.y}</text>`; }
   const crossAt = (pts, need) => { for (let k = 0; k < pts.length; k++) if (pts[k] >= need[k]) return k; return null; };
   const when = k => { if (k == null) return 'niet binnen de horizon'; const d = fromYm(LAST + k); return `${MONTHS[d.m]} ${d.y}`; };
   $('chart').innerHTML = grid +
     `<rect x="${L}" y="${T}" width="${X(0) - L}" height="${Hh - T - B}" fill="#ffffff" opacity=".035"/>` +
-    `<line x1="${X(0)}" x2="${X(0)}" y1="${T}" y2="${Hh - B}" stroke="#6f7b8a" stroke-dasharray="3 3"/><text x="${X(0) + 6}" y="${T + 12}" font-size="11" fill="#aab4c2">vandaag</text>` +
+    `<line x1="${X(0)}" x2="${X(0)}" y1="${T}" y2="${Hh - B}" stroke="#6f7b8a" stroke-dasharray="3 3"/><text x="${X(0) + 6}" y="${T + 12}" font-size="${fs}" fill="#aab4c2">vandaag</text>` +
     `<path d="${band}" fill="${COLORS[sel]}" opacity=".18"/>` +
     `<path d="${path(cur.need)}" fill="none" stroke="#e66767" stroke-width="2" stroke-dasharray="7 5"/>` +
     `<line x1="${L}" x2="${W - R}" y1="${Y(g.goal)}" y2="${Y(g.goal)}" stroke="#c98500" stroke-width="1.5" stroke-dasharray="2 5"/>` +
@@ -491,7 +549,7 @@ function renderProj() {
     `<path d="${path(past, -H)}" fill="none" stroke="#f2f4f7" stroke-width="3"/>` +
     `<circle cx="${X(0)}" cy="${Y(own)}" r="5" fill="#f2f4f7"/>` +
     (() => { const k = crossAt(cur.exp, cur.need); return k == null ? '' : `<circle cx="${X(k)}" cy="${Y(cur.exp[k])}" r="6" fill="${COLORS[sel]}" stroke="#171e28" stroke-width="2"/>`; })() +
-    `<text x="${W - R}" y="${Y(g.goal) - 6}" font-size="11" text-anchor="end" fill="#c98500">doellijn ${eur0.format(g.goal)}</text>`;
+    `<text x="${W - R}" y="${Y(g.goal) - 6}" font-size="${fs}" text-anchor="end" fill="#c98500">doellijn ${eur0.format(g.goal)}</text>`;
   $('legend').innerHTML = `<span><i style="background:#f2f4f7"></i>gemeten (laatste 12 maanden)</span>` + S.map((s, i) => `<span><i style="background:${COLORS[i]}"></i>${s.sc.name}</span>`).join('') +
     `<span><i style="background:${COLORS[sel]};opacity:.3;height:10px"></i>P25–P75 van het gekozen scenario</span><span><i style="background:#e66767"></i>eigen inbreng nodig</span><span><i style="background:#c98500"></i>doellijn</span>`;
   const needToday = ownNeeded(cur.sc, g.price); const scale = Math.max(needToday, g.goal); const pct = Math.min(100, own / scale * 100); const yearAgo = past[0];
@@ -536,6 +594,7 @@ $('tx-body').addEventListener('click', e => { const b = e.target.closest('[data-
 $('rev-all').addEventListener('change', e => { state.revAll = e.target.checked; renderDocs(); });
 $('rev-body').addEventListener('change', e => { const s = e.target.closest('select[data-id]'); if (!s) return; TX.find(x => x.id == s.dataset.id).cat = s.value || null; s.classList.toggle('none', !s.value); });
 $('params').addEventListener('input', renderProj);
+window.addEventListener('resize', () => { if ($('proj').classList.contains('on')) renderProj(); });
 $('scen-bar').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.new) { scenarios.push(Object.assign({}, scenarios[sel], { name: `Scenario ${scenarios.length + 1}` })); sel = scenarios.length - 1; } else sel = +b.dataset.i; renderProj(); });
 $('scen-edit').addEventListener('input', e => { const i = e.target; if (!i.name) return; scenarios[sel][i.name] = i.name === 'name' ? i.value : +i.value; if (i.name !== 'name') renderProj(); else document.querySelector(`#scen-bar [data-i="${sel}"]`).lastChild.textContent = i.value; });
