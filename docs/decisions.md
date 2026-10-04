@@ -86,6 +86,7 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 48  | Projection screen | Far fewer options in the side panel; the rest of the options live inside scenarios; scenarios can be saved and switched between; the chart shows progress | Remark 7. Which options stay outside the scenarios is open; the mock-up proposes: horizon, house type and province, median price, goal line, plus the measured facts (own money today, saving pace) read-only. |
 | 49  | Home screen top block | The block with the saved figure and the categories becomes a coloured field, its colour showing how the money flowed in that period for the active tab | Remark 4. The mock-up reads this as green when the figure is positive and red when negative, deeper with size; other readings possible. |
 | 50  | Visual design | Try an entirely different visual | Remark 9. Second mock-up uses a different direction; not a final choice. |
+| 51  | Mobile mock-up | A mobile version of the second mock-up is wanted | Stijn, 2026-10-04. Extends #41 (PC only). Done as a responsive layer in the same file; the device strategy for the build (responsive from day one as in #9, or PC first) is still open. |
 
 ## Still open
 
