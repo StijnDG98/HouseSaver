@@ -20,3 +20,4 @@ Stijn's remarks on the mock-up, logged verbatim in the order they came. Nothing 
 
 | #   | Remark | Screen / element |
 | --- | ------ | ---------------- |
+| 1   | "the biggest remark i was thinking of is that i want to keep track of the situation from the start of a scenario" — said while looking at the phone Projectie artboard on the Design canvas. | Projectie, scenarios and the measured history |
