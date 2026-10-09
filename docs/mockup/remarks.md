@@ -26,3 +26,4 @@ Stijn's remarks on the mock-up, logged verbatim in the order they came. Nothing 
 
 | #   | Remark | Screen / element |
 | --- | ------ | ---------------- |
+| 1   | "something i really want to see is what was projected at the start and how we do compared to it" — said while the phone Projectie artboard on the canvas had "Huidig ritme" selected, which by #53 has no start. | Projectie, scenario tracking |
