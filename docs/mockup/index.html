@@ -508,7 +508,8 @@ const COLORS = ['#3987e5', '#d95926', '#199e70', '#9085e9'];
 // A scenario freezes its starting situation (decision #52): `start` is months before today, `pace` the measured
 // saving pace at that moment. Own money at the start is read from the measured history.
 let scenarios = [
-  { name: 'Huidig ritme',     start: -8, pace: 1650, incS: 2650, incP: 2300, extra: 0,   rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
+  // 'Huidig ritme' is the exception (decision #53): it follows the measured pace and has no start.
+  { name: 'Huidig ritme', live: true, start: 0, pace: 0, incS: 2650, incP: 2300, extra: 0,   rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
   { name: 'Partner naar 5/5', start: -5, pace: 1720, incS: 2650, incP: 2680, extra: 380, rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
   { name: 'Opslag jij',       start: -2, pace: 1780, incS: 2800, incP: 2300, extra: 150, rate: 2.0, mrate: 3.8, years: 25, ltv: 90, dti: 38, growth: 4.0 },
 ];
@@ -528,6 +529,7 @@ function renderProj() {
   $('fact-own').textContent = eur0.format(own); $('fact-save').textContent = eur0.format(save) + ' / maand'; $('fact-band').textContent = `${eur0.format(st.p25 / 100)} – ${eur0.format(st.p75 / 100)}`;
   const hist = monthly('samen').map(c => c / 100); const past = [own]; for (let k = hist.length - 1; k >= 0; k--) past.unshift(past[0] - hist[k]);
   const H = past.length - 1; const months = g.horizon * 12;
+  for (const sc of scenarios) if (sc.live) { sc.start = 0; sc.pace = Math.round(save); sc.extra = 0; }
   // plan of a scenario, from its start to the horizon; index i is month start + i
   const planOf = (sc, adj) => { const r = Math.pow(1 + sc.rate / 100, 1 / 12); let v = past[H + sc.start]; const out = [v]; for (let k = sc.start + 1; k <= months; k++) { v = v * r + (sc.pace + sc.extra) * adj; out.push(v); } return out; };
   const S = scenarios.map(sc => { const plan = planOf(sc, 1), low = planOf(sc, st.p25 / st.med), high = planOf(sc, st.p75 / st.med);
@@ -547,6 +549,7 @@ function renderProj() {
   const crossLow = (pts, s) => { for (let k = 0; k <= months; k++) if (pts[k - s.sc.start] >= s.need[k]) return k; return null; };
   const when = k => k == null ? 'niet binnen de horizon' : whenK(k);
   const planPaths = (s, i, bold) => { const past_ = s.plan.slice(0, -s.sc.start + 1), fut = s.plan.slice(-s.sc.start);
+    if (s.sc.live) return `<path d="${path(fut)}" fill="none" stroke="${COLORS[i]}" stroke-width="${bold ? 3 : 1.5}" opacity="${bold ? 1 : .7}"/>`;
     return `<path d="${path(past_, s.sc.start)}" fill="none" stroke="${COLORS[i]}" stroke-width="${bold ? 2.5 : 1.5}" stroke-dasharray="5 4" opacity="${bold ? 1 : .6}"/>` +
       `<path d="${path(fut)}" fill="none" stroke="${COLORS[i]}" stroke-width="${bold ? 3 : 1.5}" opacity="${bold ? 1 : .7}"/>` +
       `<circle cx="${X(s.sc.start)}" cy="${Y(s.plan[0])}" r="${bold ? 5 : 4}" fill="#171e28" stroke="${COLORS[i]}" stroke-width="2"/>`; };
@@ -557,32 +560,32 @@ function renderProj() {
     `<path d="${path(cur.need)}" fill="none" stroke="#e66767" stroke-width="2" stroke-dasharray="7 5"/>` +
     `<line x1="${L}" x2="${W - R}" y1="${Y(g.goal)}" y2="${Y(g.goal)}" stroke="#c98500" stroke-width="1.5" stroke-dasharray="2 5"/>` +
     S.map((s, i) => i === sel ? '' : planPaths(s, i, false)).join('') + planPaths(cur, sel, true) +
-    `<line x1="${X(0)}" x2="${X(0)}" y1="${Y(cur.atToday)}" y2="${Y(own)}" stroke="${cur.gap >= 0 ? '#5ad68f' : '#ff8a80'}" stroke-width="4" opacity=".9"/>` +
+    (cur.sc.live ? '' : `<line x1="${X(0)}" x2="${X(0)}" y1="${Y(cur.atToday)}" y2="${Y(own)}" stroke="${cur.gap >= 0 ? '#5ad68f' : '#ff8a80'}" stroke-width="4" opacity=".9"/>`) +
     `<path d="${path(past, -H)}" fill="none" stroke="#f2f4f7" stroke-width="3"/>` +
     `<circle cx="${X(0)}" cy="${Y(own)}" r="5" fill="#f2f4f7"/>` +
     (() => { const k = crossAt(cur); return k == null ? '' : `<circle cx="${X(k)}" cy="${Y(cur.plan[k - cur.sc.start])}" r="6" fill="${COLORS[sel]}" stroke="#171e28" stroke-width="2"/>`; })() +
     `<text x="${W - R}" y="${Y(g.goal) - 6}" font-size="${fs}" text-anchor="end" fill="#c98500">doellijn ${eur0.format(g.goal)}</text>`;
-  $('legend').innerHTML = `<span><i style="background:#f2f4f7"></i>gemeten</span>` + S.map((s, i) => `<span><i style="background:${COLORS[i]}"></i>${s.sc.name} (plan sinds ${MS[fromYm(LAST + s.sc.start).m]} ${fromYm(LAST + s.sc.start).y})</span>`).join('') +
+  $('legend').innerHTML = `<span><i style="background:#f2f4f7"></i>gemeten</span>` + S.map((s, i) => `<span><i style="background:${COLORS[i]}"></i>${s.sc.name}${s.sc.live ? ' (gemeten ritme)' : ` (plan sinds ${MS[fromYm(LAST + s.sc.start).m]} ${fromYm(LAST + s.sc.start).y})`}</span>`).join('') +
     `<span><i style="background:${COLORS[sel]};opacity:.3;height:10px"></i>P25–P75</span><span><i style="background:#e66767"></i>eigen inbreng nodig</span><span><i style="background:#c98500"></i>doellijn</span>`;
   const needToday = ownNeeded(cur.sc, g.price); const scale = Math.max(needToday, g.goal); const pct = Math.min(100, own / scale * 100); const yearAgo = past[0];
   $('progress').innerHTML = `<div class="track"><i style="width:${pct.toFixed(1)}%"></i><b style="left:${(needToday / scale * 100).toFixed(1)}%;background:#e66767" title="eigen inbreng nodig"></b><b style="left:${Math.min(99.5, g.goal / scale * 100).toFixed(1)}%" title="doellijn"></b></div>
     <div class="row"><span><strong>${eur0.format(own)}</strong> van ${eur0.format(needToday)} eigen inbreng nodig, <strong>${Math.round(pct)} %</strong></span><span>een jaar geleden ${eur0.format(yearAgo)}, dus <strong class="pos">+ ${eur0.format(own - yearAgo)}</strong></span></div>`;
   const ahead = cur.gap >= 0; const startLabel = whenK(cur.sc.start);
-  $('track').innerHTML = `<b class="${ahead ? 'pos' : 'neg'}">${eur0.format(Math.abs(Math.round(cur.gap)))} ${ahead ? 'voor' : 'achter'} op plan</b> sinds ${startLabel}. Vertrekpunt toen: ${eur0.format(Math.round(cur.ownStart))} eigen middelen, ${eur0.format(cur.sc.pace)} per maand${cur.sc.extra ? ` + ${eur0.format(cur.sc.extra)} extra` : ''}. Het plan rekende op ${eur0.format(Math.round(cur.atToday))} vandaag; het is ${eur0.format(own)}.`;
+  $('track').innerHTML = cur.sc.live ? `<b>Huidig ritme</b> volgt het gemeten spaarritme van ${eur0.format(Math.round(save))} per maand en heeft geen vertrekpunt. Kies een ander scenario om te zien of jullie voor of achter op plan liggen.` : `<b class="${ahead ? 'pos' : 'neg'}">${eur0.format(Math.abs(Math.round(cur.gap)))} ${ahead ? 'voor' : 'achter'} op plan</b> sinds ${startLabel}. Vertrekpunt toen: ${eur0.format(Math.round(cur.ownStart))} eigen middelen, ${eur0.format(cur.sc.pace)} per maand${cur.sc.extra ? ` + ${eur0.format(cur.sc.extra)} extra` : ''}. Het plan rekende op ${eur0.format(Math.round(cur.atToday))} vandaag; het is ${eur0.format(own)}.`;
   const mb = maxBid(cur.sc, own); const ke = crossAt(cur), kl = crossLow(cur.low, cur), kh = crossLow(cur.high, cur);
   $('results').innerHTML = `<div><small>Wat jullie vandaag kunnen bieden</small><b>${eur0.format(Math.round(mb.price / 1000) * 1000)}</b><small>lening ${eur0.format(Math.round(mb.loan / 1000) * 1000)}</small></div>` +
     `<div><small>Eigen inbreng nodig, mediaanwoning</small><b>${eur0.format(Math.round(needToday / 100) * 100)}</b><small>${g.type} in ${g.prov}, kosten inbegrepen</small></div>` +
     `<div><small>Bereikt volgens dit plan</small><b>${when(ke)}</b><small>tussen ${when(kh)} en ${when(kl)}</small></div>`;
   const target = 12; const r = Math.pow(1 + cur.sc.rate / 100, 1 / 12); const req = (cur.need[target] - own * Math.pow(r, target)) / target; const pace = save + cur.sc.extra; const ok = pace >= req;
   $('advice').innerHTML = `Om over een jaar, in ${when(target)}, de mediaanwoning te kunnen kopen moeten jullie <b class="${ok ? '' : 'short'}">${eur0.format(Math.round(req / 10) * 10)} per maand</b> sparen. Met het ritme van nu${cur.sc.extra ? ' plus de extra van dit scenario' : ''} is dat ${eur0.format(Math.round(pace))}${ok ? ', dus dat lukt' : `, dus ${eur0.format(Math.round((req - pace) / 10) * 10)} te weinig`}.`;
-  $('scen-bar').innerHTML = S.map((s, i) => `<button class="chip ${i === sel ? 'on' : ''}" data-i="${i}"><i style="background:${COLORS[i]}"></i>${s.sc.name}<small class="${s.gap >= 0 ? 'pos' : 'neg'}">${s.gap >= 0 ? '+' : '−'} ${eur0.format(Math.abs(Math.round(s.gap)))}</small></button>`).join('') +
+  $('scen-bar').innerHTML = S.map((s, i) => `<button class="chip ${i === sel ? 'on' : ''}" data-i="${i}"><i style="background:${COLORS[i]}"></i>${s.sc.name}${s.sc.live ? '<small>gemeten</small>' : `<small class="${s.gap >= 0 ? 'pos' : 'neg'}">${s.gap >= 0 ? '+' : '−'} ${eur0.format(Math.abs(Math.round(s.gap)))}</small>`}</button>`).join('') +
     (scenarios.length < 4 ? `<button class="chip" data-new="1">+ Nieuw scenario</button>` : `<small>maximum 4 scenario's naast elkaar</small>`);
   const sc = cur.sc;
-  $('scen-edit').innerHTML = `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><i style="width:12px;height:12px;border-radius:50%;background:${COLORS[sel]}"></i><input class="name" name="name" value="${sc.name}"><small>gestart in ${startLabel}; het vertrekpunt van toen ligt vast, de opties hieronder zijn aanpasbaar</small></div>
+  $('scen-edit').innerHTML = `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><i style="width:12px;height:12px;border-radius:50%;background:${COLORS[sel]}"></i><input class="name" name="name" value="${sc.name}"><small>${sc.live ? 'volgt het gemeten ritme, zonder vertrekpunt; alleen de rekenregels hieronder zijn aanpasbaar' : `gestart in ${startLabel}; het vertrekpunt van toen ligt vast, de opties hieronder zijn aanpasbaar`}</small></div>
     <div class="grid">
       <label>Inkomen jij <input type="number" name="incS" value="${sc.incS}"></label>
       <label>Inkomen partner <input type="number" name="incP" value="${sc.incP}"></label>
-      <label>Extra sparen <input type="number" name="extra" value="${sc.extra}"></label>
+      ${sc.live ? '<label>Spaarritme <input type="number" value="' + sc.pace + '" disabled></label>' : `<label>Extra sparen <input type="number" name="extra" value="${sc.extra}"></label>`}
       <label>Rente sparen % <input type="number" step="0.1" name="rate" value="${sc.rate}"></label>
       <label>Hypotheekrente % <input type="number" step="0.1" name="mrate" value="${sc.mrate}"></label>
       <label>Looptijd (jaren) <input type="number" name="years" value="${sc.years}"></label>
@@ -590,7 +593,7 @@ function renderProj() {
       <label>Max. aflossing % <input type="number" name="dti" value="${sc.dti}"></label>
       <label>Prijsgroei % <input type="number" step="0.1" name="growth" value="${sc.growth}"></label>
     </div>
-    <div class="actions"><button class="btn primary small" data-act="save">Scenario opslaan</button><button class="btn small" data-act="dup">Dupliceren</button><button class="btn small ghost" data-act="restart">Opnieuw starten vanaf vandaag</button><button class="btn small ghost" data-act="del" ${scenarios.length === 1 ? 'disabled' : ''}>Verwijderen</button></div>`;
+    <div class="actions"><button class="btn primary small" data-act="save">Scenario opslaan</button><button class="btn small" data-act="dup">Dupliceren</button>${sc.live ? '' : `<button class="btn small ghost" data-act="restart">Opnieuw starten vanaf vandaag</button><button class="btn small ghost" data-act="del">Verwijderen</button>`}</div>`;
 }
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
 
@@ -610,13 +613,13 @@ $('rev-body').addEventListener('change', e => { const s = e.target.closest('sele
 $('params').addEventListener('input', renderProj);
 window.addEventListener('resize', () => { if ($('proj').classList.contains('on')) renderProj(); });
 $('scen-bar').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.new) { scenarios.push(Object.assign({}, scenarios[sel], { name: `Scenario ${scenarios.length + 1}`, start: 0, pace: Math.round(stats().med / 100) })); sel = scenarios.length - 1; } else sel = +b.dataset.i; renderProj(); });
+  if (b.dataset.new) { scenarios.push(Object.assign({}, scenarios[sel], { name: `Scenario ${scenarios.length + 1}`, live: false, start: 0, pace: Math.round(stats().med / 100) })); sel = scenarios.length - 1; } else sel = +b.dataset.i; renderProj(); });
 $('scen-edit').addEventListener('input', e => { const i = e.target; if (!i.name) return; scenarios[sel][i.name] = i.name === 'name' ? i.value : +i.value; if (i.name !== 'name') renderProj(); else document.querySelector(`#scen-bar [data-i="${sel}"]`).lastChild.textContent = i.value; });
 $('scen-edit').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (!b) return;
   if (b.dataset.act === 'save') toast(`“${scenarios[sel].name}” opgeslagen`);
-  if (b.dataset.act === 'dup' && scenarios.length < 4) { scenarios.push(Object.assign({}, scenarios[sel], { name: scenarios[sel].name + ' (kopie)', start: 0, pace: Math.round(stats().med / 100) })); sel = scenarios.length - 1; renderProj(); }
+  if (b.dataset.act === 'dup' && scenarios.length < 4) { scenarios.push(Object.assign({}, scenarios[sel], { name: scenarios[sel].name + ' (kopie)', live: false, start: 0, pace: Math.round(stats().med / 100) })); sel = scenarios.length - 1; renderProj(); }
   if (b.dataset.act === 'restart') { Object.assign(scenarios[sel], { start: 0, pace: Math.round(stats().med / 100) }); renderProj(); toast('Vertrekpunt is nu vandaag'); }
-  if (b.dataset.act === 'del' && scenarios.length > 1) { scenarios.splice(sel, 1); sel = 0; renderProj(); } });
+  if (b.dataset.act === 'del' && !scenarios[sel].live) { scenarios.splice(sel, 1); sel = 0; renderProj(); } });
 $('btn-settings').addEventListener('click', () => $('drawer').classList.add('open'));
 document.querySelector('#drawer .close').addEventListener('click', () => $('drawer').classList.remove('open'));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') $('drawer').classList.remove('open'); });
