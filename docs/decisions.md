@@ -87,6 +87,7 @@ Confirmed decisions, newest at the bottom. Anything not listed here is still ope
 | 49  | Home screen top block | The block with the saved figure and the categories becomes a coloured field, its colour showing how the money flowed in that period for the active tab | Remark 4. The mock-up reads this as green when the figure is positive and red when negative, deeper with size; other readings possible. |
 | 50  | Visual design | Try an entirely different visual | Remark 9. Second mock-up uses a different direction; not a final choice. |
 | 51  | Mobile mock-up | A mobile version of the second mock-up is wanted | Stijn, 2026-10-04. Extends #41 (PC only). Done as a responsive layer in the same file; the device strategy for the build (responsive from day one as in #9, or PC first) is still open. |
+| 52  | Scenario tracking | A scenario keeps track of the situation from its start: it has a start date, freezes the starting situation (own money, saving pace, incomes) and from then on shows what it predicted against what actually happened, both as lines on the chart and as a figure (ahead of or behind plan since the start) | Stijn, 2026-10-09, round 2 remark 1; reading confirmed "for now", form (c) both. "Huidig ritme" is a scenario like the others and gets a start too. |
 
 ## Still open
 
